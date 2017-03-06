@@ -1,0 +1,23 @@
+//
+   Created by Дмитрий on 23.11.2016.
+extends sources_list
+
+block content
+
+    //p Hello page shown HELLO HELLO HELLO #{title}
+
+    form(action='/add_source/', name="add_source_form", method="post")
+        div.input
+            span.label source type
+            br
+            input(type="text", name="source_type", placeholder="source_type")
+            br
+        div.input
+            span.label source url
+            br
+            input(type="text", name="source_url", placeholder="source_url")
+        div.actions
+            input(type="submit", value="add")
+
+    h3 Source is added and parsed! Type: Youtube; Parser: youtube_parser
+    h3 Sources list:

@@ -1,0 +1,20 @@
+//
+   Created by Дмитрий on 02.12.2016.
+
+extends layout
+
+block content
+    h1= title
+    //p Hello page shown HELLO HELLO HELLO #{title}
+
+    form(action='/add_quote/', name="addform", method="post")
+        div.input
+            span.label name
+            input(type="text", name="name", placeholder="name")
+            div.input
+                span.label quote
+                input(type="text", name="quote", placeholder="quote")
+        div.actions
+            input(type="submit", value="add")
+
+    h1= qresponse
