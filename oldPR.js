@@ -1,7 +1,7 @@
 /**
  * Created by Дмитрий on 08.12.2016.
  */
-dbHelper = require('./libs/dbHelper');
+dbHelper = require('./modules/dbHelper');
 db = dbHelper.db;
 itemProvider = dbHelper.itemProvider;
 db.collection('quotes');

@@ -24,7 +24,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 /* DB VARIABLES */
-var dbHelper = require('./libs/dbHelper');
+var dbHelper = require('./modules/dbHelper');
 //app.set('port', process.env.PORT || 3000);
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -36,8 +36,8 @@ dbHelper.initDB(function(err) {
         throw err;
     }
 
-    require('./libs/schemas');
-    require('./libs/test_schemas');
+    require('./models/core_schemas');
+    require('./test/test_schemas');
     //console.log('listening to port 3000');
     var server = app.listen(app.get('port'), function() {
         debug('Express server listening on port ' + server.address().port);
@@ -45,10 +45,10 @@ dbHelper.initDB(function(err) {
     });
         //test some mongoose queries
     //app.listen(port); //database is initialized, ready to listen for connections
-    this.db = require('./libs/dbHelper').db;
-    this.yParser = require('./libs/youtube_parser').yParser;
+    this.db = require('./modules/dbHelper').db;
+    this.yParser = require('./modules/youtube_parser').yParser;
     //this.yParser.setDB(db);
-    this.SourceManager = require('./libs/SourceManager');
+    this.SourceManager = require('./modules/SourceManager');
 });
 
 

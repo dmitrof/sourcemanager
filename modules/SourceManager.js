@@ -7,7 +7,7 @@ db = dbHelper.db;
 itemProvider = dbHelper.itemProvider;
 db.collection('quotes');
 
-var schemas = require('./schemas');
+var schemas = require('./../models/core_schemas');
 var Source = schemas.Source;
 
 module.exports.setDB = function(_db) {
