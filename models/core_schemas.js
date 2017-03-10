@@ -3,32 +3,11 @@
  * здесь будут все схемы. Необходимо переделать dbHelper (или обойтись без него)
  */
 var mongoose = require('mongoose');
-var dbHelper = require('./../modules/dbHelper');
+var dbHelper = require('./../modules/db_wrapper');
 var fs = require('fs');
 var mongoose_attachments = require('mongoose-attachments-aws2js');
 var Schema = mongoose.Schema;
 //аттачменты gridfs
-
-mongoose.connect('mongodb://localhost/sourcemanager');
-mongoose.connection.on('error', function (err) {
-    console.error('db error:', err.message);
-    callback(err)
-});
-
-mongoose.connection.once('open', function() {
-     console.log("Connected to DB!");
-    //identifying attachments
-    //аттачменты gridfs
-    var gridfs = require('mongoose-gridfs')({
-        collection:'attachments',
-        model:'Attachment'
-    });
-    var AttachmentSchema = gridfs.schema;
-
-    module.exports.Attachments = mongoose.model('Attachment', AttachmentSchema);
-    console.log(module.exports.Attachments);
-});
-
 
 /* типы источников. Может содержать неявную ссылку на tutorClient*/
 var sourceTypesSchema = new Schema({
@@ -140,6 +119,7 @@ module.exports.Item = mongoose.model('Item', sourceSchema);
 module.exports.ItemLink = mongoose.model('ItemLink', itemLinkSchema);
 module.exports.TutorClientDoc = mongoose.model('TutorClientDoc', tutorClientSchema);
 module.exports.ParserDoc = mongoose.model('ParserDoc', parsersSchema);
+
 //
 
 //module.exports.Attachment = Attachments; //mongoose.model('Attachment', AttachmentSchema);

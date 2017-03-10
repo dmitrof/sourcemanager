@@ -2,7 +2,7 @@
  * Created by Дмитрий on 22.11.2016.
  */
 
-dbHelper = require('./dbHelper');
+dbHelper = require('./db_wrapper');
 db = dbHelper.db;
 itemProvider = dbHelper.itemProvider;
 db.collection('quotes');

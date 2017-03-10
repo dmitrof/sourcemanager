@@ -3,22 +3,33 @@
  */
 //mongoose connect
 var schemas = require('./../models/core_schemas');
+var dbWrapper = require('./../modules/db_wrapper');
+var fs = require('fs');
 //instantiate mongoose-gridfs
 
 
 //obtain a model
-var Attachments = schemas.Attachments;
+dbWrapper.initDB(function(err) {
+    //console.log('smth happening');
+    if (err) {
+        console.log(err);
+        throw err;
+    }
+    Attachments = dbWrapper.Attachments;
+    Attachments.write({
+            filename:'sample.txt',
+            contentType:'text/plain'
+        },
+        fs.createReadStream('/tmp/nodejs.jpg'),
+        function(err, createdFile) {
+            if (err) {throw err}
+            else console.log('attachment is saved')
+        });
+});
+
 
 //create or save a file
-Attachments.write({
-        filename:'sample.txt',
-        contentType:'text/plain'
-    },
-    fs.createReadStream('/tmp/nodejs.jpg'),
-    function(err, createdFile) {
-        if (err) {throw err}
-        else console.log('attachment is saved')
-    });
+
 
 //for larger file size
 

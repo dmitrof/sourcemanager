@@ -24,7 +24,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 /* DB VARIABLES */
-var dbHelper = require('./modules/dbHelper');
+var dbHelper = require('./modules/db_wrapper');
 //app.set('port', process.env.PORT || 3000);
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -45,7 +45,7 @@ dbHelper.initDB(function(err) {
     });
         //test some mongoose queries
     //app.listen(port); //database is initialized, ready to listen for connections
-    this.db = require('./modules/dbHelper').db;
+    this.db = require('./modules/db_wrapper').db;
     this.yParser = require('./modules/youtube_parser').yParser;
     //this.yParser.setDB(db);
     this.SourceManager = require('./modules/SourceManager');
