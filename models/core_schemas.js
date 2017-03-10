@@ -8,8 +8,26 @@ var fs = require('fs');
 var mongoose_attachments = require('mongoose-attachments-aws2js');
 var Schema = mongoose.Schema;
 //аттачменты gridfs
-var gridfs = require('mongoose-gridfs')
+
 mongoose.connect('mongodb://localhost/sourcemanager');
+mongoose.connection.on('error', function (err) {
+    console.error('db error:', err.message);
+    callback(err)
+});
+
+mongoose.connection.once('open', function() {
+     console.log("Connected to DB!");
+    //identifying attachments
+    //аттачменты gridfs
+    var gridfs = require('mongoose-gridfs')({
+        collection:'attachments',
+        model:'Attachment'
+    });
+    var AttachmentSchema = gridfs.schema;
+
+    module.exports.Attachments = mongoose.model('Attachment', AttachmentSchema);
+    console.log(module.exports.Attachments);
+});
 
 
 /* типы источников. Может содержать неявную ссылку на tutorClient*/
@@ -113,23 +131,17 @@ itemLinkSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
 
-var AttachmentSchema = gridfs.schema;
+//var AttachmentSchema = gridfs.model;
 
 //Attachments = mongoose.model('Attachment', AttachmentSchema);
-/*var Source = mongoose.model('Source', sourceSchema);
-var Item = mongoose.model('Item', sourceSchema);
-var ItemLink =
-var SourceType = mongoose.model('SourceType', sourceTypesSchema);
-var ParserDoc = mongoose.model('ParserDoc', parsersSchema);
-var TutorClientDoc = mongoose.model('ParserDoc', tutorClientSchema);*/
-// make this available to our users in our Node applications
 module.exports.Source = mongoose.model('Source', sourceSchema);
 module.exports.SourceType = mongoose.model('SourceType', sourceTypesSchema);
 module.exports.Item = mongoose.model('Item', sourceSchema);
 module.exports.ItemLink = mongoose.model('ItemLink', itemLinkSchema);
 module.exports.TutorClientDoc = mongoose.model('TutorClientDoc', tutorClientSchema);
 module.exports.ParserDoc = mongoose.model('ParserDoc', parsersSchema);
+//
 
 //module.exports.Attachment = Attachments; //mongoose.model('Attachment', AttachmentSchema);
-console.log('schemas created!')
+console.log('schemas created!');
 

@@ -3,7 +3,7 @@
  */
 //var dbHelper = require('./dbHelper');
 var schemas = require('./../models/core_schemas');
-var Attachments = schemas.Attachment;
+var Attachments = schemas.Attachments;
 var fs = require('fs');
 //var Grid = require('gridfs-stream');
 //testing attached methods
@@ -37,7 +37,7 @@ var item = new schemas.Item({
 
 
 
-/*Attachments.write({
+Attachments.write({
     filename:'sample.txt',
     contentType:'text/plain'
     },
