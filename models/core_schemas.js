@@ -21,7 +21,7 @@ sourceTypesSchema.methods.attachMetadata = function(_metadata) {
 /* типы парсеров */
 var parsersSchema = new Schema({
     name : { type: String, required: true, unique: true},
-    source_type : {type: String, required: true},
+    source_type : {type: String, required: true, unique : true},
     metadata : {}
 }, {collection : "parsers"});
 parsersSchema.methods.attachMetadata = function(_metadata) {

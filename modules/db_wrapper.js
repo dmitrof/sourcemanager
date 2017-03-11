@@ -5,7 +5,7 @@ var fs = require('fs');
 
 module.exports.initDB = function() {
     return new Promise(function(resolve, reject) {
-        mongoose.connect('mongodb://localhost/exampleDb');
+        mongoose.connect('mongodb://localhost/sourcemanager');
         mongoose.connection.on('error', function (err) {
             console.error('db error:', err.message);
             reject(err);
@@ -19,8 +19,8 @@ module.exports.initDB = function() {
             });
             var AttachmentSchema = gridfs.schema;
             module.exports.Attachments = mongoose.model('Attachment', AttachmentSchema);
+            mongoose.Promise = global.Promise;
             resolve("Connected to DB!");
-
         });
     });
 };
