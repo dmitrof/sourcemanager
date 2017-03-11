@@ -23,8 +23,36 @@ sources_urls = require('./../config/source_domain');
 
     //adding source to database. URL validation required
 var addSource = function(source_url, source_type, source_info) {
-    var promises = [];
-    var parser;
+    return new Promise(function(resolve, reject) {
+        var promises = [];
+        fetchSourceMetadata(source_url).then(metadata => {
+                return {
+                    url: source_url,
+                    type: source_type,
+                    metadata: metadata
+                };
+            },
+            reject => {
+                console.log("failed to fetch metadata:".concat(reject));
+                return {
+                    url: source_url,
+                    source_type: source_type
+                };
+            }
+        ).then(source_info => {
+            return saveSource(source_info)
+        }).then(saveSuccess => {
+            console.log(saveSuccess);
+            resolve(saveSuccess);
+        }).catch(err => reject(err));
+    });
+    /*parser_manager.getParserByType(source_type)
+        .then(parser => {
+            var source_info = {
+                url : source_url,
+                source_type : source_type,
+            };
+        })*/
 
 };
 
@@ -37,8 +65,19 @@ parseSource = function(source_url, _parser, callback) {
         console.log("PARSEDPARSEDPARSEDPARSEDPARSEDPARSED");
     });
 };
+
 /*
-Производится запись основных данных об источнике
+некая абстрактная асинхронная операция извлечения метаданных источника,
+пока непонятно где и как ее использовать. Например, на сайте могут храниться данные об источнике, которые необходимо парсить.
+ */
+var fetchSourceMetadata = function(source_url) {
+    return new Promise(function (resolve, reject) {
+        resolve("Kostylnaya metadata");
+    })
+};
+
+/*
+ Производится запись основных данных об источнике
  */
 var saveSource = function(source_info) {
     return new Promise(function (resolve, reject) {
@@ -53,13 +92,44 @@ var saveSource = function(source_info) {
                 reject(err);
             }
             else {
-                console.log(source.name + "saved to db");
+                //console.log(source.name + "saved to db");
                 resolve(source.name + "saved to db");
             }
         })
     })
 };
 module.exports.saveSource = saveSource;
+
+var getSourceByUrl = function(source_url) {
+    return new Promise(function(resolve, reject) {
+        Source.findOne({ url : source_url}, function(err, doc) {
+            if (err) {
+                console.log("findone error");
+                reject(err)
+            }
+            else {
+
+                resolve(doc);
+            }
+        });
+    });
+};
+module.exports.getSourceByUrl = getSourceByUrl;
+var removeSourceByUrl = function(source_url) {
+    return new Promise(function(resolve, reject) {
+        Source.remove({ url : source_url}, function(err) {
+            if (err) {
+                resolve("could not remove source  \"".concat(source_url));
+                reject(err)
+            }
+            else {
+                resolve("source  \"".concat(source_url).concat("\" removed"));
+            }
+        });
+    });
+};
+
+module.exports.removeSourceByUrl = removeSourceByUrl;
 
 
 validateUrl = function(source_url,callback) {   //TODO а надо ли вообще?

@@ -1,19 +1,22 @@
 var dbWrapper = require('./../modules/db_wrapper');
 
-dbWrapper.initDB(function(err) {
-    //console.log('smth happening');
-    if (err) {
-        console.log(err);
-        throw err;
-    }
-    var parserManager = require('./../modules/parser_manager');
+
+dbWrapper.initDB().then(response => {
     var sourceManager = require('./../modules/source_manager');
-    //var schemas = require('./../models/core_schemas');
-
-    parserManager.getParserData();
-
+    var Source = require('./../models/core_schemas').Source;
+    var source_url = "www.com"; var source_type = "hzchto";
 
 
+    sourceManager.addSource(source_url, source_type, "source_info")
+    .then(addSuccess => {
+        return sourceManager.getSourceByUrl(source_url);
+    }).then(source => {
+        console.log("source url is ".concat(source.url));
+        return sourceManager.removeSourceByUrl(source.url);
+    }).then(resolve => console.log("все ок")).catch(error => {
+        console.log(error);
+    });
 
-});
-dbWrapper.closeConnection();
+
+    },
+    reject => {console.log("not connected to DB")});

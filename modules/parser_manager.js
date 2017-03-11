@@ -44,7 +44,7 @@ var removeParserByType = function(source_type) {
             }
             else {
                 console.log(source_type.concat("removed"));
-                resolve("parser for source type \"".concat(source_type).concat("\"removed"));
+                resolve("parser for source type \"".concat(source_type).concat("\" removed"));
             }
         });
     });
