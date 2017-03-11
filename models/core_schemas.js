@@ -111,6 +111,20 @@ itemLinkSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
 
+/* linkTagSchema */
+var linkTagSchema = new Schema({
+    text : { type: String, required: true, unique: true},
+    description : { type: String,  default : "Undescribed tag"},
+    metadata : {},
+    nodes : {}  //TODO решить где хранить
+}, {collection : "source_types"});
+
+linkTagSchema.methods.attachMetadata = function(_metadata) {
+    this.metadata = _metadata;
+};
+linkTagSchema.methods.attachNodes = function(_nodes) {
+    this.nodes = _nodes;
+};
 //var AttachmentSchema = gridfs.model;
 
 //Attachments = mongoose.model('Attachment', AttachmentSchema);
@@ -119,10 +133,11 @@ module.exports.SourceType = mongoose.model('SourceType', sourceTypesSchema);
 module.exports.Item = mongoose.model('Item', sourceSchema);
 module.exports.ItemLink = mongoose.model('ItemLink', itemLinkSchema);
 module.exports.TutorClientDoc = mongoose.model('TutorClientDoc', tutorClientSchema);
-module.exports.ParserDoc = mongoose.model('ParserDoc', parsersSchema);
+module.exports.Parser = mongoose.model('Parser', parsersSchema);
+module.exports.LinkTag = mongoose.model('LinkTag', linkTagSchema);
 
 //
 
 //module.exports.Attachment = Attachments; //mongoose.model('Attachment', AttachmentSchema);
-console.log('schemas created!');
+console.log('core_schemas created!');
 

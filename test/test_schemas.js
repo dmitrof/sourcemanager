@@ -29,7 +29,7 @@ sourceType2.save(function(err) {
 
 
 /*
-var item = new schemas.Item({
+var item = new core_schemas.Item({
     source_url : "www.http" + Math.random() * 10,
 
     item_type : "source_type"

@@ -7,8 +7,13 @@ db = dbHelper.db;
 itemProvider = dbHelper.itemProvider;
 db.collection('quotes');
 
-var schemas = require('./../models/core_schemas');
-var Source = schemas.Source;
+
+var parser_manager = require('./../modules/parser_manager');
+var core_schemas = require('./../models/core_schemas');
+var Source = core_schemas.Source;
+var SourceType = core_schemas.SourceType;
+var ParserInfo = core_schemas.Parser;
+
 
 module.exports.setDB = function(_db) {
     db = _db;
@@ -21,7 +26,7 @@ var addSource = function(source_url, source_type, callback) {
     var promises = [];
     var parser;
     getParserPromise = new Promise(function(resolve, reject) {
-        getParser(source_url, source_type, function(err, _parser) {
+        parser_manager.getParserData(source_type, function(err, _parser) {
             if (err) {
                 console.log(err);
                 reject(err)
@@ -75,6 +80,11 @@ var addSource = function(source_url, source_type, callback) {
     };
 
 module.exports.addSource = addSource;
+
+
+
+
+
 //parse start parsing source's contents. Delegates logic to specific parser (for exmple jishoParser)
 parseSource = function(source_url, _parser, callback) {
     var parser = require('./youtube_parser');
