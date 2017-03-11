@@ -1,5 +1,5 @@
 /**
- * Created by Дмитрий on 11.03.2017.
+ * Created by Дмитрий on 01.03.2017.
  */
 var core_schemas = require('./../models/core_schemas');
 var ParserInfo = core_schemas.Parser;

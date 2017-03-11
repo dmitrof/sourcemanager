@@ -22,6 +22,7 @@ sourceTypesSchema.methods.attachMetadata = function(_metadata) {
 var parsersSchema = new Schema({
     name : { type: String, required: true, unique: true},
     source_type : {type: String, required: true, unique : true},
+    saves_attachments : { type: Boolean, required: true, default : true},
     metadata : {}
 }, {collection : "parsers"});
 parsersSchema.methods.attachMetadata = function(_metadata) {
@@ -34,13 +35,12 @@ var sourceSchema = new Schema({
     url : { type: String, required: true, unique: true},
     type : {type: String, required: true},
     name : {type: String, required: true, default : "Unnamed source"},
-    description : String,
-    author : String,            //данные об авторае ресурса?
+    description : {type: String, default : "Undiscribed source"},
+    //author : String,            //данные об авторае ресурса? в метадату
     added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
-    creation_time : Date,       //время создания ресурса (если имеется)
+    //creation_time : Date,       //время создания ресурса (если имеется) в метадату
     save_time : {type: Date, required: true},
     update_time : {type: Date, required: true},
-    last_parsing_time : {type: Date},
     extras : {},
     metadata : {}
 } , {collection : "sources"});
@@ -71,10 +71,10 @@ var itemSchema = new Schema( {
     source_url : { type: String, required: true },    //ссылается на source_url SourceSchema
     parsed : { type: Boolean, required: true, default : true},
     has_attachment : { type: Boolean, required: true, default : false},
-    item_type : {type: String, required: true},
-    item_description : String,
-    created_at : Date,
-    updated_at : Date,
+    //item_type : {type: String, required: true},
+    item_description : {type: String, default : "Undiscribed source"},
+    save_time : {type: Date, required: true},
+    update_time : {type: Date, required: true},
     metadata : {},
     extras : {}, //в этом поле может храниться дополнительная инфа
     attachment_id : {},
@@ -102,8 +102,8 @@ var itemLinkSchema = new Schema({
     source_url : { type: String, required: true, unique: true },
     state : {type: String, required: true}, //состояние связи
     item_link_author : { type: String, unique: true, required: true }, //указывает на login того, кто залинковал
-    created_at : Date,
-    updated_at : Date,
+    save_time : {type: Date, required: true},
+    update_time : {type: Date, required: true},
     metadata : {}
 }, {collection : "item_links"});
 
@@ -116,6 +116,8 @@ var linkTagSchema = new Schema({
     text : { type: String, required: true, unique: true},
     description : { type: String,  default : "Undescribed tag"},
     metadata : {},
+    save_time : {type: Date, required: true},
+    update_time : {type: Date, required: true},
     nodes : {}  //TODO решить где хранить
 }, {collection : "source_types"});
 
