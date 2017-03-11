@@ -22,68 +22,13 @@ sources_types = require('./../config/source_types');
 sources_urls = require('./../config/source_domain');
 
     //adding source to database. URL validation required
-var addSource = function(source_url, source_type, callback) {
+var addSource = function(source_url, source_type, source_info) {
     var promises = [];
     var parser;
-    getParserPromise = new Promise(function(resolve, reject) {
-        parser_manager.getParserData(source_type, function(err, _parser) {
-            if (err) {
-                console.log(err);
-                reject(err)
-            }
-            else {
-                parser = _parser;
-                resolve(parser)
-            }
 
-        });
-    });
-    promises.push(getParserPromise);
-    getParserPromise.then(function(){
-        db_promise = new Promise(function(resolve, reject) {
-            source = {}; source.source_url = source_url;
-            source.source_type = source_type;
-            
-            saveSource(source, function(err, ok) {
-                if (err) {
-                    console.log(err);
-                    reject(err)
-                }
-                else {
-                    console.log(ok);
-                    resolve('source is saved')
-                }
-                });
-            });
-            db_promise.then(function(value) {
-                parseSource(source_url, parser);
-                callback(null, value);
-
-            },
-            function(reason) {
-
-                callback(reason);
-            });
-            promises.push(db_promise);
-        }, function(reason){
-            callback(reason);
-        });
-
-        /*Promise.all(promises).then(function() {
-            callback(null, 'Source is added!');
-        });*/
-
-
-
-
-
-    };
+};
 
 module.exports.addSource = addSource;
-
-
-
-
 
 //parse start parsing source's contents. Delegates logic to specific parser (for exmple jishoParser)
 parseSource = function(source_url, _parser, callback) {
@@ -92,14 +37,15 @@ parseSource = function(source_url, _parser, callback) {
         console.log("PARSEDPARSEDPARSEDPARSEDPARSEDPARSED");
     });
 };
-
-saveSource = function(source_info) {
+/*
+Производится запись основных данных об источнике
+ */
+var saveSource = function(source_info) {
     return new Promise(function (resolve, reject) {
         var source = new Source({
             url : source_info.url,
-            type : source_info.type,
-
-            //и так далее
+            type : source_info.type
+            //added_by_user : getUserFromSession
         });
         source.save(function (err) {
             if (err) {
@@ -110,19 +56,16 @@ saveSource = function(source_info) {
                 console.log(source.name + "saved to db");
                 resolve(source.name + "saved to db");
             }
-
         })
-
     })
+};
+module.exports.saveSource = saveSource;
 
 
-
+validateUrl = function(source_url,callback) {   //TODO а надо ли вообще?
 
 };
-validateUrl = function(source_url,callback) {
-
-};
-getUrlDomain = function(source_url, callback) {
+getUrlDomain = function(source_url, callback) { //TODO а надо ли вообще?
     //return source_url;
     return 'www.youtube.com';
 };
