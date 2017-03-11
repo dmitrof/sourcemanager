@@ -13,8 +13,10 @@ var Schema = mongoose.Schema;
 var sourceTypesSchema = new Schema({
     type : { type: String, required: true, unique: true},
     description : { type: String,  default : "Undescribed source"},
-    metadata : {}
-}, {collection : "source_types"});
+    metadata : {},
+    created_at : {type: Date},
+    updated_at : {type: Date}
+}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "source_types"});
 sourceTypesSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
@@ -59,8 +61,10 @@ sourceSchema.methods.attachMetadata = function(_metadata) {
 var tutorClientSchema = new Schema({
     tutor_client_name : { type: String, required: true, unique: true },
     source_description : String,
+    created_at : {type: Date},
+    updated_at : {type: Date},
     metadata : {}
-} , {collection : "tutor_clients"});
+} , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "tutor_clients"});
 
 tutorClientSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
