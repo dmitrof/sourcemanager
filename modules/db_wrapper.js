@@ -27,6 +27,11 @@ module.exports.initDB = function(init_callback) {
     });
 };
 
+module.exports.closeConnection = function() {
+    mongoose.connection.close();
+    console.log("mongoose connection closed");
+};
+
 
 /*var fs = require('fs');
 

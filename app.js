@@ -48,7 +48,7 @@ dbHelper.initDB(function(err) {
     this.db = require('./modules/db_wrapper').db;
     this.yParser = require('./modules/youtube_parser').yParser;
     //this.yParser.setDB(db);
-    this.SourceManager = require('./modules/SourceManager');
+    this.SourceManager = require('./modules/source_manager');
 });
 
 

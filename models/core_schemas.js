@@ -40,6 +40,7 @@ var sourceSchema = new Schema({
     creation_time : Date,       //время создания ресурса (если имеется)
     save_time : {type: Date, required: true},
     update_time : {type: Date, required: true},
+    last_parsing_time : {type: Date},
     extras : {},
     metadata : {}
 } , {collection : "sources"});
