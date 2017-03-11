@@ -92,30 +92,32 @@ parseSource = function(source_url, _parser, callback) {
         console.log("PARSEDPARSEDPARSEDPARSEDPARSEDPARSED");
     });
 };
-saveSource = function(_source, callback) {
-    var source = new Source({
-        source_url : _source.source_url,
-        source_type : _source.source_type,
-        //и так далее
-    });
-    source.save(function(err) {
-        if (err)
-            throw err;
-        callback(null, 'source is saved');
-    });
-    /*source = {};
-    source.source_url = source_url;
-    source.type = source_type;
-    dbHelper.saveSource(source, function(err, ok) {
-        if (err) {
-            console.log(err);
-            callback(err)
-        }
-        else {
-            //console.log(ok);
-            callback(null, 'source saved');
-        }
-    });*/
+
+saveSource = function(source_info) {
+    return new Promise(function (resolve, reject) {
+        var source = new Source({
+            url : source_info.url,
+            type : source_info.type,
+
+            //и так далее
+        });
+        source.save(function (err) {
+            if (err) {
+                console.log("saveSource error: " + err);
+                reject(err);
+            }
+            else {
+                console.log(source.name + "saved to db");
+                resolve(source.name + "saved to db");
+            }
+
+        })
+
+    })
+
+
+
+
 };
 validateUrl = function(source_url,callback) {
 

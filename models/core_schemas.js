@@ -22,9 +22,12 @@ sourceTypesSchema.methods.attachMetadata = function(_metadata) {
 var parsersSchema = new Schema({
     name : { type: String, required: true, unique: true},
     source_type : {type: String, required: true, unique : true},
-    saves_attachments : { type: Boolean, required: true, default : true},
-    metadata : {}
-}, {collection : "parsers"});
+    saves_attachments : { type: Boolean, required: true, default : true},   //сохраняет ли парсер аттачменты? (для больших файлов)
+    standalone : { type: Boolean, required: true, default : false},     //указывает на то, является ли парсер автономным приложением
+    metadata : {},
+    created_at : {type: Date},
+    updated_at : {type: Date}
+}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "parsers"});
 parsersSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
@@ -36,14 +39,12 @@ var sourceSchema = new Schema({
     type : {type: String, required: true},
     name : {type: String, required: true, default : "Unnamed source"},
     description : {type: String, default : "Undiscribed source"},
-    //author : String,            //данные об авторае ресурса? в метадату
     added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
-    //creation_time : Date,       //время создания ресурса (если имеется) в метадату
-    save_time : {type: Date, required: true},
-    update_time : {type: Date, required: true},
+    created_at : {type: Date},
+    updated_at : {type: Date},
     extras : {},
     metadata : {}
-} , {collection : "sources"});
+} , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "sources"});
 
 sourceSchema.methods.attachExtras = function(_extras) {
     this.extras = _extras;
@@ -51,6 +52,7 @@ sourceSchema.methods.attachExtras = function(_extras) {
 sourceSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
+
 /*
 схема "конструктора" контента. Конструктор связан с "типом" источника
  */
@@ -73,13 +75,13 @@ var itemSchema = new Schema( {
     has_attachment : { type: Boolean, required: true, default : false},
     //item_type : {type: String, required: true},
     item_description : {type: String, default : "Undiscribed source"},
-    save_time : {type: Date, required: true},
-    update_time : {type: Date, required: true},
+    created_at : {type: Date},
+    updated_at : {type: Date},
     metadata : {},
     extras : {}, //в этом поле может храниться дополнительная инфа
     attachment_id : {},
     body : {} //в этом поле (если не в аттачменте) может храниться сам контент
-} , {collection : "items"});
+} , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "items"});
 //метод для добавления дополнительных полей. Будет вызываться после парсинга
 itemSchema.methods.attachExtras = function(_extras) {
     this.extras = _extras;
@@ -102,10 +104,10 @@ var itemLinkSchema = new Schema({
     source_url : { type: String, required: true, unique: true },
     state : {type: String, required: true}, //состояние связи
     item_link_author : { type: String, unique: true, required: true }, //указывает на login того, кто залинковал
-    save_time : {type: Date, required: true},
-    update_time : {type: Date, required: true},
+    created_at : {type: Date},
+    updated_at : {type: Date},
     metadata : {}
-}, {collection : "item_links"});
+}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "item_links"});
 
 itemLinkSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
@@ -116,10 +118,10 @@ var linkTagSchema = new Schema({
     text : { type: String, required: true, unique: true},
     description : { type: String,  default : "Undescribed tag"},
     metadata : {},
-    save_time : {type: Date, required: true},
-    update_time : {type: Date, required: true},
+    created_at : {type: Date},
+    updated_at : {type: Date},
     nodes : {}  //TODO решить где хранить
-}, {collection : "source_types"});
+}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "source_types"});
 
 linkTagSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
