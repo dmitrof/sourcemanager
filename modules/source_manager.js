@@ -1,18 +1,13 @@
 /**
  * Created by Дмитрий on 22.11.2016.
  */
-
-dbHelper = require('./db_wrapper');
-db = dbHelper.db;
-itemProvider = dbHelper.itemProvider;
-db.collection('quotes');
-
-
 var parser_manager = require('./../modules/parser_manager');
+var item_manager = require('./../modules/item_manager');
 var core_schemas = require('./../models/core_schemas');
 var Source = core_schemas.Source;
 var SourceType = core_schemas.SourceType;
 var ParserInfo = core_schemas.Parser;
+var Item = core_schemas.Item;
 
 
 module.exports.setDB = function(_db) {
@@ -88,7 +83,6 @@ var fetchSourceMetadata = function(source_url) {
         resolve("Kostylnaya metadata");
     })
 };
-
 /*
  Производится запись основных данных об источнике
  */
@@ -111,27 +105,9 @@ var saveSource = function(source_info) {
         })
     })
 };
-module.exports.saveSource = function(item) {
-    return new Promise(function (resolve, reject) {
-        var source = new Source({
-            url : source_info.url,
-            type : source_info.type
-            //added_by_user : getUserFromSession
-        });
-        source.save(function (err) {
-            if (err) {
-                console.log("saveSource error: " + err);
-                reject(err);
-            }
-            else {
-                //console.log(source.name + "saved to db");
-                resolve(source.name + "saved to db");
-            }
-        })
-    })
-};
+module.exports.saveSource = saveSource;
 
-var saveItem = func
+
 
 var getSourceByUrl = function(source_url) {
     return new Promise(function(resolve, reject) {
@@ -148,6 +124,7 @@ var getSourceByUrl = function(source_url) {
     });
 };
 module.exports.getSourceByUrl = getSourceByUrl;
+
 var removeSourceByUrl = function(source_url) {
     return new Promise(function(resolve, reject) {
         Source.remove({ url : source_url}, function(err) {

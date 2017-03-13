@@ -14,18 +14,6 @@ youTube.setKey(ACCESS_TOKEN);
 });*/
 
 var source_type = "YouTube";
-
-var getChannelId = function(url) {
-    return 'UCKPbiit_j8ycmkutM0wVzdA';
-};
-
-
-
-
-var getPlayListId = function(url) {
-    return 'PLDyvV36pndZFWfEQpNixIHVvp191Hb3Gg';
-};
-
 var playListSchema = function(rawItem) {
     item = {};
 };
@@ -44,8 +32,10 @@ var buildItem = function(rawItem, source_url) {
 };
 
 var buildResponse = function(items) {
-
-}
+    if (items.length > 0)
+        return { status : "items_fetched",  items : items}
+    else return { status : "no_items_fetched"}
+};
 
 /*убрать из module.exports*/
 /*TODO может быть несколько разных представлений адреса канала*/
@@ -63,7 +53,7 @@ var buildRequest = function(source_url) {
         let playListId = source_url.substring(source_url.indexOf('channel') + 'channel'.length + 1, source_url.length);
         if (playListId.includes('/')) channelId = playListId.substr(0, channelId.indexOf('/'));
         console.log('Parsing youtube playlist'.concat(source_url));
-        let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id&order=date&maxResults=10';
+        let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id,contentDetails&order=date&maxResults=10';
         req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', playListId);
         return req;
     }
@@ -82,6 +72,7 @@ var generateErrorText = function(response_body) {
 var fetchAllItems = function(source_url) {
     return new Promise((resolve, reject) => {
         try {
+            var items = [];
             var req = buildRequest(source_url);
             request.get(req, function(err, header, body) {
                 if (err) {
@@ -99,11 +90,13 @@ var fetchAllItems = function(source_url) {
                     var rawItem = rawItems[i];
                     //console.log(rawItem.id.videoId);
                     var item = buildItem(rawItem);
-                    console.log(item);
-                    //console.log(item.item_id);
+                    //console.log(item);
+                    console.log(item.item_id);
+                    items.push(item);
                     //console.log(rawItem);
                 }
-                resolve(rawItem);
+
+                resolve(buildResponse(items));
             });
         }
         catch(e) { reject(e); }
