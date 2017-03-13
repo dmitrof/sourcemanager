@@ -43,6 +43,7 @@ var sourceSchema = new Schema({
     description : {type: String, default : "Undiscribed source"},
     added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
     created_at : {type: Date},
+    parsed : { type: Boolean, required: true, default : true},
     updated_at : {type: Date},
     extras : {},
     metadata : {}
@@ -71,14 +72,17 @@ tutorClientSchema.methods.attachMetadata = function(_metadata) {
 };
 /*
 item schema - модель единицы учебного контента
+документы этого типа будут меняться чаще всего. При повторном парсинге ресурса, будет добавляться новый
+ документ, старый документ удаляться не будет.
  */
 var itemSchema = new Schema( {
-    item_id : { type: String, unique: true, required: true }, //id генерируется парсером на основе uri айтема или его содержимого
+    name : { type: String, required: true }, //name - НЕ уникальный id генерируется парсером на основе uri айтема или его содержимого
+    title : String,
+    type : { type: String, required: true, default : "Unidentified item type"},
     source_url : { type: String, required: true },    //ссылается на source_url SourceSchema
-    parsed : { type: Boolean, required: true, default : true},
     has_attachment : { type: Boolean, required: true, default : false},
     //item_type : {type: String, required: true},
-    item_description : {type: String, default : "Undiscribed source"},
+    item_description : {type: String, default : "Undiscribed item"},
     created_at : {type: Date},
     updated_at : {type: Date},
     metadata : {},

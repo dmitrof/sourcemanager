@@ -46,13 +46,7 @@ var addSource = function(source_url, source_type, source_info) {
             resolve(saveSuccess);
         }).catch(err => reject(err));
     });
-    /*parser_manager.getParserByType(source_type)
-        .then(parser => {
-            var source_info = {
-                url : source_url,
-                source_type : source_type,
-            };
-        })*/
+
 
 };
 
@@ -60,11 +54,30 @@ module.exports.addSource = addSource;
 
 //parse start parsing source's contents. Delegates logic to specific parser (for exmple jishoParser)
 parseSource = function(source_url, _parser, callback) {
-    var parser = require('./youtube_parser');
+    var parser = require('./youtube_fetcher');
     parser.parseDefault(source_url, function(err, ok) {
         console.log("PARSEDPARSEDPARSEDPARSEDPARSEDPARSED");
     });
 };
+
+
+/* Запрос к локальному парсеру */
+var parseSource = function(source_url) {
+    parser_manager.getParserByType(source_type)
+        .then(parserInfo => {
+            var parser = require('../../'.concat(parserInfo.name));
+        })
+};
+
+/* запрос к локальноу или удаленному парсеру */
+var parseRequest = function(source_url, parserInfo) {
+    return new Promise(function(resolve, reject) {
+
+    })
+};
+
+
+
 
 /*
 некая абстрактная асинхронная операция извлечения метаданных источника,
@@ -98,7 +111,27 @@ var saveSource = function(source_info) {
         })
     })
 };
-module.exports.saveSource = saveSource;
+module.exports.saveSource = function(item) {
+    return new Promise(function (resolve, reject) {
+        var source = new Source({
+            url : source_info.url,
+            type : source_info.type
+            //added_by_user : getUserFromSession
+        });
+        source.save(function (err) {
+            if (err) {
+                console.log("saveSource error: " + err);
+                reject(err);
+            }
+            else {
+                //console.log(source.name + "saved to db");
+                resolve(source.name + "saved to db");
+            }
+        })
+    })
+};
+
+var saveItem = func
 
 var getSourceByUrl = function(source_url) {
     return new Promise(function(resolve, reject) {
