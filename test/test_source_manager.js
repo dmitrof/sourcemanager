@@ -13,7 +13,8 @@ dbWrapper.initDB().then(response => {
     }).then(source => {
         console.log("source url is ".concat(source.url));
         return sourceManager.removeSourceByUrl(source.url);
-    }).then(resolve => console.log("все ок")).catch(error => {
+    }).then(resolve => {console.log("все ок");
+    dbWrapper.closeConnection()}).catch(error => {
         console.log(error);
     });
 

@@ -13,7 +13,7 @@ youTube.setKey(ACCESS_TOKEN);
     console.log(body);
 });*/
 
-var source_type = "YouTube";
+var source_type = "youtube";
 var playListSchema = function(rawItem) {
     item = {};
 };
@@ -21,7 +21,7 @@ var playListSchema = function(rawItem) {
 /* TODO когда появится компонент визуализации контента, придется переделать body */
 var buildItem = function(rawItem, source_url) {
     item = {};
-    item.name = source_type.concat(source_url).concat(rawItem.id.videoId); item.type = 'youtube_video';
+    item.name = source_type.concat(rawItem.id.videoId); item.type = 'youtube_video';
     item.title = rawItem.snippet.title;
     item.source_url = source_url;
     item.added_by = 'testUser';
@@ -33,7 +33,7 @@ var buildItem = function(rawItem, source_url) {
 
 var buildResponse = function(items) {
     if (items.length > 0)
-        return { status : "items_fetched",  items : items}
+        return { status : "items_fetched",  items : items};
     else return { status : "no_items_fetched"}
 };
 
@@ -88,14 +88,11 @@ var fetchAllItems = function(source_url) {
                 //console.log(body);
                 for (i in rawItems) {
                     var rawItem = rawItems[i];
-                    //console.log(rawItem.id.videoId);
-                    var item = buildItem(rawItem);
+                    var item = buildItem(rawItem, source_url);
                     //console.log(item);
-                    console.log(item.item_id);
                     items.push(item);
-                    //console.log(rawItem);
                 }
-
+                console.log(buildResponse(items));
                 resolve(buildResponse(items));
             });
         }

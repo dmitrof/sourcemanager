@@ -5,13 +5,14 @@ var core_schemas = require('./../models/core_schemas');
 var ParserInfo = core_schemas.Parser;
 
 var getParserByType = function(source_type) {
-    return new Promise(function(resolve, reject) {      //TODO убрать findOne
+    return new Promise(function(resolve, reject) {
         ParserInfo.findOne({ source_type : source_type}, function(err, doc) {
             if (err) {
                 console.log("findone error");
                 reject(err)
             }
             else {
+                //console.log(doc);
                 resolve(doc);
             }
         });

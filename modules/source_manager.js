@@ -21,17 +21,20 @@ var addSource = function(source_url, source_type, source_info) {
     return new Promise(function(resolve, reject) {
         var promises = [];
         fetchSourceMetadata(source_url).then(metadata => {
-                return {
+                let source_info = {
                     url: source_url,
                     type: source_type,
-                    metadata: metadata
+                    metadata : metadata
                 };
+                return source_info;
             },
             reject => {
                 console.log("failed to fetch metadata:".concat(reject));
-                return {
+                return source_info;
+                let source_info = {
                     url: source_url,
-                    source_type: source_type
+                    type: source_type,
+                    metadata : metadata
                 };
             }
         ).then(source_info => {
@@ -47,22 +50,58 @@ var addSource = function(source_url, source_type, source_info) {
 
 module.exports.addSource = addSource;
 
-//parse start parsing source's contents. Delegates logic to specific parser (for exmple jishoParser)
-parseSource = function(source_url, _parser, callback) {
-    var parser = require('./youtube_fetcher');
-    parser.parseDefault(source_url, function(err, ok) {
-        console.log("PARSEDPARSEDPARSEDPARSEDPARSEDPARSED");
+
+/* добавляет ресурс, после чего вызывает его парсинг */
+var addAndParseSource = function(source_url, source_type, info) {
+    return new Promise((resolve, reject) => {
+        addSource(source_url, source_type, info).then(
+            source_added => {
+                console.log("Source " + source_url + " parsing has started");
+                parseSource(source_url, source_type).then(parserResponse => {
+                    console.log("Source " + source_url + " parsing has finished");
+                    saveItems(parserResponse);
+                },
+                    parser_rejected => console.log("parser rejected ".concat(reject))
+                ).then(saveSuccess => console.log(saveSuccess));
+                resolve(source_added);
+            }
+        ).catch(err => {
+            reject(err)
+        });
+    })
+};
+module.exports.addAndParseSource = addAndParseSource;
+
+/* wrapper запроса к парсеру. Возвращает промис с ответом от парсера*/
+var parseSource = function(source_url, source_type) {
+
+    return new Promise((resolve, reject) => {
+        parser_manager.getParserByType(source_type)
+            .then(parserInfo => {
+                if (parserInfo.standalone) {
+
+                    return parseRequest(source_url, parserInfo);
+                }
+                else {
+
+                    var parser = require('./../modules/'.concat(parserInfo.name));
+                    return parser.fetchAllItems(source_url);
+                }
+            }, db_rejected => console.log("parser_manager error " + db_rejected)
+            ).then(parserResponse => {
+                console.log("source " + source_url + " is parsed");
+                resolve(parserResponse);
+            }, parser_rejected => {
+            console.log("parser_rejected: " + parser_rejected);
+        }).catch(err => reject(err));
     });
+
 };
+module.exports.ParseSource = parseSource;
+
+/* вызывает resolve в том случае, когда все итемы сохранены в базу */
 
 
-/* Запрос к локальному парсеру */
-var parseSource = function(source_url) {
-    parser_manager.getParserByType(source_type)
-        .then(parserInfo => {
-            var parser = require('../../'.concat(parserInfo.name));
-        })
-};
 
 /* запрос к локальноу или удаленному парсеру */
 var parseRequest = function(source_url, parserInfo) {
@@ -71,8 +110,13 @@ var parseRequest = function(source_url, parserInfo) {
     })
 };
 
-
-
+var saveItems = function(parserResponse) {
+    //console.log(parserResponse.items);
+    return new Promise((resolve, reject) => {
+        parserResponse.items.forEach(item_manager.saveBuiltItem);
+        resolve("saved");
+    });
+};
 
 /*
 некая абстрактная асинхронная операция извлечения метаданных источника,
@@ -93,6 +137,7 @@ var saveSource = function(source_info) {
             type : source_info.type
             //added_by_user : getUserFromSession
         });
+        if (source_info.hasOwnProperty('metadata')) source.attachMetadata(source_info.metadata);
         source.save(function (err) {
             if (err) {
                 console.log("saveSource error: " + err);
@@ -140,7 +185,6 @@ var removeSourceByUrl = function(source_url) {
 };
 
 module.exports.removeSourceByUrl = removeSourceByUrl;
-
 
 validateUrl = function(source_url,callback) {   //TODO а надо ли вообще?
 

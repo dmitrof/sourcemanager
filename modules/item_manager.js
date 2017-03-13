@@ -10,7 +10,7 @@ var Item = core_schemas.Item;
 /*TODO разработать метод сохранения item-а с произвольной структурой, не соответствующей itemSchema*/
 var saveBuiltItem = function(_item) {
     return new Promise((resolve, reject) => {
-        item = new Item(_item);
+        let item = new Item(_item);
         item.save(function (err) {
             if (err) {
                 console.log("saveBuiltItem error: " + err);
@@ -41,5 +41,5 @@ var getAllItemsByName = function(item_name) {
     return new Promise(function(resolve, reject) {
     })
 };
-module.exports.getSourceByUrl = getSourceByUrl;
+
 

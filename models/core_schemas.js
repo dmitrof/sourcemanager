@@ -87,7 +87,7 @@ var itemSchema = new Schema( {
     updated_at : {type: Date},
     metadata : {},
     extras : {}, //в этом поле может храниться дополнительная инфа
-    attachment_id : {},
+    attachments : {},
     body : {} //в этом поле (если не в аттачменте) может храниться сам контент
 } , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "items"});
 //метод для добавления дополнительных полей. Будет вызываться после парсинга
@@ -100,8 +100,8 @@ itemSchema.methods.attachBody = function(_body) {
 itemSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
-itemSchema.methods.setAttachment = function(_attachment_id) {
-    this.attachment_id = _attachment_id;
+itemSchema.methods.setAttachments = function(_attachments) {
+    this.attachments = _attachments;
 };
 
 /*ItemLinkSchema
@@ -142,7 +142,7 @@ linkTagSchema.methods.attachNodes = function(_nodes) {
 //Attachments = mongoose.model('Attachment', AttachmentSchema);
 module.exports.Source = mongoose.model('Source', sourceSchema);
 module.exports.SourceType = mongoose.model('SourceType', sourceTypesSchema);
-module.exports.Item = mongoose.model('Item', sourceSchema);
+module.exports.Item = mongoose.model('Item', itemSchema);
 module.exports.ItemLink = mongoose.model('ItemLink', itemLinkSchema);
 module.exports.TutorClientDoc = mongoose.model('TutorClientDoc', tutorClientSchema);
 module.exports.Parser = mongoose.model('Parser', parsersSchema);
