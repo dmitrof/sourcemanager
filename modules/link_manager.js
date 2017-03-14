@@ -7,7 +7,26 @@ var item_manager = require('./../modules/item_manager');
 var ItemLinkModel = core_schemas.ItemLink;
 var ItemModel = core_schemas.Item;
 var LinkTagModel = core_schemas.LinkTag;
+var ontology_provider = require('./../modules/ontology_provider');
 
+
+var getAllLinks = function() {
+    return new Promise(function(resolve, reject) {
+        ItemLinkModel.find([
+            { $match : {state : 'active'}},
+            { $group : {_id : 'item_name'}}
+        ], function(err, docs) {
+            if (err) {
+                console.log("findone error");
+                reject(err)
+            }
+            else {
+                //console.log(docs);
+                resolve(docs);
+            }
+        });
+    });
+};
 /* возвращает все itemLink-и для айтема */
 var getLinksByItem = function(_item_name) {
     return new Promise(function(resolve, reject) {
@@ -25,21 +44,22 @@ var getLinksByItem = function(_item_name) {
 };
 module.exports.getLinksByItem = getLinksByItem;
 
+
 /*Добавляет itemLink в базу */
 var addItemLink = function(_item_name, node_id, node_data) {
-    var constr = { item_name : _item_name, node_id : node_id};
-    if (node_data.hasOwnProperty('node_name'))
-        constr.node_name = node_data.node_name;
-    if (node_data.hasOwnProperty('node_description'))
-        constr.node_description = node_data.node_description;
-    var metadata = {};
-    for (var property in node_data) {
-        if (node_data.hasOwnProperty(property))
-            metadata[property] = node_data[property];
-    }
-    var itemLink = new ItemLinkModel(constr);
-    itemLink.attachMetadata(metadata)
     return new Promise(function (resolve, reject) {
+        var constr = { item_name : _item_name, node_id : node_id};
+        if (node_data.hasOwnProperty('node_name'))
+            constr.node_name = node_data.node_name;
+        if (node_data.hasOwnProperty('node_description'))
+            constr.node_description = node_data.node_description;
+        var metadata = {};
+        for (var property in node_data) {
+            if (node_data.hasOwnProperty(property))
+                metadata[property] = node_data[property];
+        }
+        var itemLink = new ItemLinkModel(constr);
+        itemLink.attachMetadata(metadata);
         itemLink.save(function (err) {
             if (err) {
                 console.log("addItemLink error: " + err);
@@ -71,8 +91,44 @@ var removeAllLinksByItem = function(_item_name) {
 };
 
 /* связывание по тегам. В рамках этой процедуры производится запрос к модулю онтологии*/
-var addLinkByTag = function() {
+var addLinksByTag = function(item_name, tag_text, data) {
+    return new Promise((resolve, reject) => {
+        getTagByText(tag_text).then(tag_data => {
+            let node_ids = [];
+            tag_data.nodes.forEach(function(node, i) {
+                console.log(node);
+                node_ids.push(node);
+            });
+            console.log(node_ids);
+            ontology_provider.requestNodesData(node_ids).then(ontology_response => {
+                console.log('Response status from ontology_service: '.concat(ontology_response.status));
+                let nodes = ontology_response.nodes;
+                nodes.forEach(function(node, i, nodes) {
+                    console.log('adding link for node '.concat(node.node_id));
+                    addItemLink(item_name, node.node_id, node).then(success => console.log(success)).catch(err => console.log(err));
+                });
+                resolve('all itemLinks for tag '.concat(tag_text).concat(' are processed'));
+            }).catch(err => reject(err));
 
+        }, failure => reject(failure))
+    });
+
+};
+module.exports.addLinksByTag = addLinksByTag;
+
+var getTagByText = function(tag_text) {
+    return new Promise(function(resolve, reject) {
+        LinkTagModel.findOne({ text : tag_text}, function(err, doc) {
+            if (err) {
+                console.log("findone error");
+                reject(err)
+            }
+            else {
+                //console.log(doc);
+                resolve(doc);
+            }
+        });
+    });
 };
 
 var addTag = function(tag_text, tag_data) {

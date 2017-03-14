@@ -111,7 +111,7 @@ var itemLinkSchema = new Schema({
     node_name : { type: String, required: true, default : "Unnamed node"},
     node_description : { type: String},
     state : {type : String, required: true, enum : ['active', 'inactive'], default : 'active'},
-    item_link_author : { type: String, unique: true, required: true , default : 'Kostyl user'}, //указывает на login того, кто залинковал
+    item_link_author : { type: String,  required: true , default : 'Kostyl user'}, //указывает на login того, кто залинковал
     created_at : {type: Date},
     updated_at : {type: Date},
     metadata : {}
@@ -130,7 +130,7 @@ var linkTagSchema = new Schema({
     created_at : {type: Date},
     updated_at : {type: Date},
     nodes : []  //TODO решить где хранить
-}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "source_types"});
+}, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "item_link_tags"});
 
 linkTagSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
