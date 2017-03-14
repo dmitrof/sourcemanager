@@ -23,6 +23,7 @@ var saveBuiltItem = function(_item) {
         })
     })
 };
+module.exports.saveBuiltItem = saveBuiltItem;
 
 
 /*TODO реализовать методы ниже */

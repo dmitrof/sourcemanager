@@ -43,7 +43,7 @@ var sourceSchema = new Schema({
     description : {type: String, default : "Undiscribed source"},
     added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
     created_at : {type: Date},
-    parsed : { type: Boolean, required: true, default : true},
+    parse_state : {type : String, required: true, enum : ['pending', 'parsed', 'parse_not_possible'], default : 'pending'},
     updated_at : {type: Date},
     extras : {},
     metadata : {}
@@ -86,9 +86,7 @@ var itemSchema = new Schema( {
     created_at : {type: Date},
     updated_at : {type: Date},
     metadata : {},
-    extras : {}, //в этом поле может храниться дополнительная инфа
-    attachments : {},
-    body : {} //в этом поле (если не в аттачменте) может храниться сам контент
+
 } , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "items"});
 //метод для добавления дополнительных полей. Будет вызываться после парсинга
 itemSchema.methods.attachExtras = function(_extras) {
@@ -107,11 +105,13 @@ itemSchema.methods.setAttachments = function(_attachments) {
 /*ItemLinkSchema
  */
 var itemLinkSchema = new Schema({
-    item_id : { type: String, unique: true, required: true }, //id единицы контента
-    node_id : { type: String, unique: true, required: true },
-    source_url : { type: String, required: true, unique: true },
-    state : {type: String, required: true}, //состояние связи
-    item_link_author : { type: String, unique: true, required: true }, //указывает на login того, кто залинковал
+    item_name : { type: String,  required: true }, //name единицы контента
+    node_id : { type: String,  required: true },
+    source_url : { type: String },
+
+
+    state : {type : String, required: true, enum : ['active', 'inactive'], default : 'active'},
+    item_link_author : { type: String, unique: true, required: true , default : 'Kostyl user'}, //указывает на login того, кто залинковал
     created_at : {type: Date},
     updated_at : {type: Date},
     metadata : {}
