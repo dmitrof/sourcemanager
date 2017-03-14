@@ -28,11 +28,17 @@ module.exports.getLinksByItem = getLinksByItem;
 /*Добавляет itemLink в базу */
 var addItemLink = function(_item_name, node_id, node_data) {
     var constr = { item_name : _item_name, node_id : node_id};
+    if (node_data.hasOwnProperty('node_name'))
+        constr.node_name = node_data.node_name;
+    if (node_data.hasOwnProperty('node_description'))
+        constr.node_description = node_data.node_description;
+    var metadata = {};
     for (var property in node_data) {
         if (node_data.hasOwnProperty(property))
-            constr[property] = node_data[property];
+            metadata[property] = node_data[property];
     }
     var itemLink = new ItemLinkModel(constr);
+    itemLink.attachMetadata(metadata)
     return new Promise(function (resolve, reject) {
         itemLink.save(function (err) {
             if (err) {
@@ -63,4 +69,52 @@ var removeAllLinksByItem = function(_item_name) {
         });
     });
 };
+
+/* связывание по тегам. В рамках этой процедуры производится запрос к модулю онтологии*/
+var addLinkByTag = function() {
+
+};
+
+var addTag = function(tag_text, tag_data) {
+    var tagconstr = {text : tag_text}; var node_list = [];
+    if (tag_data.hasOwnProperty('nodes'))
+        node_list = tag_data.nodes;
+    var metadata = {};
+    for (var property in tag_data) {
+        if (tag_data.hasOwnProperty(property))
+            metadata[property] = tag_data[property];
+    }
+    var tag = new LinkTagModel({text : tag_text, nodes : node_list});
+    tag.attachMetadata(metadata);
+    return new Promise(function(resolve, reject) {
+        tag.save(function (err) {
+            if (err) {
+                console.log("tagSave error: " + err);
+                reject(err);
+            }
+            else {
+                //console.log("itemLink for " + itemLink.item_name + "saved to db");
+                resolve("tag " + tag_text + " saved to db");
+            }
+
+        })
+    });
+};
+
+var removeTagByText = function(tag_text) {
+    return new Promise(function(resolve, reject) {
+        LinkTagModel.remove({ text : tag_text}, function(err) {
+            if (err) {
+                console.log("removeTagByText error");
+                reject(err)
+            }
+            else {
+                //console.log("Item_links for".concat(_item_name).concat("removed"));
+                resolve("tag " + tag_text + " removed from db");
+            }
+        });
+    });
+};
+module.exports.removeTagByText = removeTagByText;
+module.exports.addTag = addTag;
 module.exports.removeAllLinksByItem = removeAllLinksByItem;
