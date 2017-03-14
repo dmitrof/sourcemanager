@@ -108,8 +108,8 @@ var itemLinkSchema = new Schema({
     item_name : { type: String,  required: true }, //name единицы контента
     node_id : { type: String,  required: true },
     source_url : { type: String },
-
-
+    node_name : { type: String, required: true, default : "Unnamed node"},
+    node_description : { type: String},
     state : {type : String, required: true, enum : ['active', 'inactive'], default : 'active'},
     item_link_author : { type: String, unique: true, required: true , default : 'Kostyl user'}, //указывает на login того, кто залинковал
     created_at : {type: Date},

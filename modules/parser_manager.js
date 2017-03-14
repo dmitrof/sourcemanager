@@ -32,7 +32,6 @@ var saveParserData = function(parser_model) {
             }
 
         })
-
     })
 };
 
