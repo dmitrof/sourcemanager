@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var sources_routes = require('./routes/sources');
+var item_routes = require('./routes/items');
 
 var app = require('express')();
 var debug = require('debug')('express-parser-3:server');
@@ -70,7 +71,7 @@ function initRoutes() {
 
     //дичайший костыль
     sources_routes.setRoutes(app);
-
+    item_routes.setRoutes(app);
 
     app.use(function(req, res, next) {
         var err = new Error('Not Found');

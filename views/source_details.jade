@@ -14,10 +14,15 @@ block content
         p= "Состояние: " + source.parse_state
 
     div.items_info
+        - var i = 0;
         h3= items_status
         each item in items
             - i++;
-            p= "  " + item.title + ": " + item.type
+            p= i + "  " + item.title + ": " + item.type
+            form(action='/get_item/', name="add_source_form", method="post")
+                input(type="hidden", name="item_name", value = item.name)
+                div.actions
+                    input(type="submit", value="Изменить")
 
 
 

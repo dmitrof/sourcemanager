@@ -40,12 +40,24 @@ var getAllItemsForSource = function(_source_url) {
 };
 module.exports.getAllItemsForSource = getAllItemsForSource;
 
-
+//получает самый свежий документ по имени (уникальное для каждой серии документов)
 var getItemByName = function(item_name) {
     return new Promise(function(resolve, reject) {
+        Item.findOne({name : item_name}, {}, { sort : {'created_at' : -1 }}, function(err, doc) {
+            if (err)
+                reject(new ErrorResult('db_fail', err));
+            else
+                console.log(doc);
+                resolve(new FetchDocResult('Документ', 'success', doc));
+        })
+
+
     })
 };
+module.exports.getItemByName = getItemByName;
 
+
+//получает все документы по имени (уникальное для каждой серии документов)
 var getAllItemsByName = function(item_name) {
     return new Promise(function(resolve, reject) {
     })

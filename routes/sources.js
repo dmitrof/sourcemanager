@@ -32,7 +32,7 @@ var setRoutes = function(app) {
             console.log(result.message);
             },
             rejected => {
-                if (!rejected.hasOwnProperty(err)) {
+                if (!rejected.hasOwnProperty('err')) {
                     res_data.source_status = rejected.status;
                 }
             }
@@ -45,7 +45,7 @@ var setRoutes = function(app) {
             res_data.items_status = result.status;
             console.log(result.message);
         }, rejected => {
-            if (!rejected.hasOwnProperty(err)) {
+            if (!rejected.hasOwnProperty('err')) {
                 res_data.items_status = rejected.status;
             }
         }).catch(err =>
@@ -56,7 +56,7 @@ var setRoutes = function(app) {
         Promise.all(promises).then(resolved => {
             res.render('source_details', res_data);
         }, rejected => {
-            if (rejected.hasOwnProperty(err))
+            if (rejected.hasOwnProperty('err'))
                 res.status(500).send(rejected.err);
             else
                 res.render('source_details', res_data);

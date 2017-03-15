@@ -85,7 +85,7 @@ var itemSchema = new Schema( {
     item_description : {type: String, default : "Undiscribed item"},
     created_at : {type: Date},
     updated_at : {type: Date},
-    metadata : {},
+    metadata : {}
 
 } , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "items"});
 //метод для добавления дополнительных полей. Будет вызываться после парсинга
@@ -93,7 +93,7 @@ itemSchema.methods.attachExtras = function(_extras) {
     this.extras = _extras;
 };
 itemSchema.methods.attachBody = function(_body) {
-    this.extras = _body;
+    this.body = _body;
 };
 itemSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;

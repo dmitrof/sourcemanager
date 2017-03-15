@@ -8,6 +8,8 @@ var ItemLinkModel = core_schemas.ItemLink;
 var ItemModel = core_schemas.Item;
 var LinkTagModel = core_schemas.LinkTag;
 var ontology_provider = require('./../modules/ontology_provider');
+var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
+var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
 
 
 var getAllLinks = function() {
@@ -18,7 +20,7 @@ var getAllLinks = function() {
         ], function(err, docs) {
             if (err) {
                 console.log("findone error");
-                reject(err)
+                reject(new ErrorResult('db_fail', err));
             }
             else {
                 //console.log(docs);
@@ -33,11 +35,11 @@ var getLinksByItem = function(_item_name) {
         ItemLinkModel.find({ item_name : _item_name}, function(err, docs) {
             if (err) {
                 console.log("findone error");
-                reject(err)
+                reject(new ErrorResult('db_fail', err));
             }
             else {
                 //console.log(docs);
-                resolve(docs);
+                resolve(new FetchDocResult('Связи с дидактическими единицами', 'success', docs));
             }
         });
     });
@@ -62,8 +64,7 @@ var addItemLink = function(_item_name, node_id, node_data) {
         itemLink.attachMetadata(metadata);
         itemLink.save(function (err) {
             if (err) {
-                console.log("addItemLink error: " + err);
-                reject(err);
+                reject(new ErrorResult("addItemLink error: ", err));
             }
             else {
                 //console.log("itemLink for " + itemLink.item_name + "saved to db");
@@ -80,7 +81,7 @@ var removeAllLinksByItem = function(_item_name) {
         ItemLinkModel.remove({ item_name : _item_name}, function(err) {
             if (err) {
                 console.log("removeAllLinksByItem error");
-                reject(err)
+                reject(new ErrorResult('removeAllLinksByItem error', err));
             }
             else {
                 console.log("Item_links for".concat(_item_name).concat("removed"));
@@ -108,7 +109,7 @@ var addLinksByTag = function(item_name, tag_text, data) {
                     addItemLink(item_name, node.node_id, node).then(success => console.log(success)).catch(err => console.log(err));
                 });
                 resolve('all itemLinks for tag '.concat(tag_text).concat(' are processed'));
-            }).catch(err => reject(err));
+            }).catch(err => reject(new ErrorResult('addLinksByTag error', err)));
 
         }, failure => reject(failure))
     });
