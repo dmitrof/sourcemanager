@@ -4,7 +4,8 @@ extends layout
 
 h3= title
 block content
-    div.info
+    div.source_info
+        h3= source_status
         p= "Название источника: " + source.name
         p= "URL: " + source.url
         p= "Описание : " + source.description
@@ -12,7 +13,11 @@ block content
         p= "Последнее обновление: " + source.updated_at
         p= "Состояние: " + source.parse_state
 
-
+    div.items_info
+        h3= items_status
+        each item in items
+            - i++;
+            p= "  " + item.title + ": " + item.type
 
 
 

@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var prefix = '/sources';
 var source_manager = require('./../modules/source_manager');
+var item_manager = require('./../modules/item_manager');
 
 var setRoutes = function(app) {
     //TODO здесь должны учитываться данные фильтров
@@ -17,22 +18,50 @@ var setRoutes = function(app) {
         }).catch(reject => {console.log('bad');res.status(500).send(reject)});
         //res.render('test_ejs', {status : "sources_list_request", sources : ['s1', 's2']});
     });
-
+    //получает источник и список единиц учебного материала
     app.post(prefix.concat('/get_source/'), function(req, res, next) {
         var source_url = req.body.source_url;
         console.log('get source request ' + source_url);
         var promises = [];
-        source_manager.getSourceByUrl(source_url).then(source => {
-            let res_data = {status : "Получены данные источника", source : source,  title : "Данные источника"};
-            //console.log(source);
+        var res_data = {title : "Данные источника"};
+
+        var getSourcePromise = source_manager.getSourceByUrl(source_url);
+        getSourcePromise.then(result => {
+            res_data.source = result.data;
+            res_data.source_status = result.status;
+            console.log(result.message);
+            },
+            rejected => {
+                if (!rejected.hasOwnProperty(err)) {
+                    res_data.source_status = rejected.status;
+                }
+            }
+        ).catch(err =>
+            console.log(err)
+        );
+        var getItemsPromise = item_manager.getAllItemsForSource(source_url);
+        getItemsPromise.then(result => {
+            res_data.items = result.data;
+            res_data.items_status = result.status;
+            console.log(result.message);
+        }, rejected => {
+            if (!rejected.hasOwnProperty(err)) {
+                res_data.items_status = rejected.status;
+            }
+        }).catch(err =>
+            console.log(err)
+        );
+
+        promises.push(getSourcePromise); promises.push(getItemsPromise);
+        Promise.all(promises).then(resolved => {
             res.render('source_details', res_data);
         }, rejected => {
-            let res_data = {status : "Источник не найден", title : "sources_list"};
-            console.log(rejected);
-            res.render('source_details', res_data);
-        }
-        ).catch(reject => {
-            console.log('bad');res.status(500).send(reject)});
+            if (rejected.hasOwnProperty(err))
+                res.status(500).send(rejected.err);
+            else
+                res.render('source_details', res_data);
+        });
+
     });
 
     app.post(prefix.concat('/add_source'), function(req, res, next) {

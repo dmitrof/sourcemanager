@@ -10,10 +10,8 @@ var returnpromise = function(i) {
 };
 
 
-
 promises = [];
 promises.push(returnpromise(2)); promises.push(returnpromise(1)); promises.push(returnpromise(1));
-
 
 
 Promise.all(promises).then(resolve => {

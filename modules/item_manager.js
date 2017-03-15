@@ -4,7 +4,8 @@
  */
 var core_schemas = require('./../models/core_schemas');
 var Item = core_schemas.Item;
-
+var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
+var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
 
 /* сохранение в БД item-а с готовой структурой, предоставленной парсером */
 /*TODO разработать метод сохранения item-а с произвольной структурой, не соответствующей itemSchema*/
@@ -27,10 +28,17 @@ module.exports.saveBuiltItem = saveBuiltItem;
 
 
 /*TODO реализовать методы ниже */
-var getAllItemsForSource = function(source_url) {
+var getAllItemsForSource = function(_source_url) {
     return new Promise(function(resolve, reject) {
+        Item.find({source_url : _source_url}, function(err, docs) {
+            if (err)
+                reject(new ErrorResult('db_fail', err));
+            else
+                resolve(new FetchDocResult('Документы для источника', 'success', docs));
+        });
     })
 };
+module.exports.getAllItemsForSource = getAllItemsForSource;
 
 
 var getItemByName = function(item_name) {

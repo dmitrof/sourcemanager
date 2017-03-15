@@ -12,7 +12,7 @@ var getParserByType = function(source_type) {
                 reject(err)
             }
             else {
-                //console.log(doc);
+                //console.log(data);
                 resolve(doc);
             }
         });

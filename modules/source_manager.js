@@ -8,7 +8,8 @@ var Source = core_schemas.Source;
 var SourceType = core_schemas.SourceType;
 var ParserInfo = core_schemas.Parser;
 var Item = core_schemas.Item;
-
+var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
+var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
 
 
 sources_types = require('./../config/source_types');
@@ -172,19 +173,16 @@ var saveSource = function(source_info) {
 };
 module.exports.saveSource = saveSource;
 
-
-
 var getSourceByUrl = function(source_url) {
-
     return new Promise(function(resolve, reject) {
         Source.findOne({ url : source_url}, function(err, doc) {
             if (err) {
                 console.log("findone error");
-                reject(err)
+                reject(new ErrorResult('db_fail', err));
             }
             else {
-                if (!doc) reject('source not found ' + source_url);
-                resolve(doc);
+                if (!doc) reject(new FetchDocResult('Не найден источник с URL: '.concat(source_url), 'not_found', doc));
+                resolve(new FetchDocResult('Получен документ', 'db_success', doc));
             }
         });
     });

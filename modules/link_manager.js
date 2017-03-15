@@ -124,7 +124,7 @@ var getTagByText = function(tag_text) {
                 reject(err)
             }
             else {
-                //console.log(doc);
+                //console.log(data);
                 resolve(doc);
             }
         });
