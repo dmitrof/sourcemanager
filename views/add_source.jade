@@ -1,19 +1,18 @@
 //
    Created by Дмитрий on 23.11.2016.
-extends sources_list.pug
+extends sources_list
 
-block content
-
+block sources_form
+    h3 Добавить новый источник
     //p Hello page shown HELLO HELLO HELLO #{title}
-
     form(action='/sources/add_source/', name="add_source_form", method="post")
         div.input
-            span.label source type
+            span.label Тип источника
             br
             input(type="text", name="source_type", placeholder="source_type")
             br
         div.input
-            span.label source url
+            span.label URL источника
             br
             input(type="text", name="source_url", placeholder="source_url")
         div.actions

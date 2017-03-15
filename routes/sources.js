@@ -12,13 +12,29 @@ var setRoutes = function(app) {
         console.log('requesting sources list');
         //filter_data = {key }
         source_manager.getSources().then(sources => {
-            //res.send('yeah');
-            res_data = {status : "sources_list_request", sources : sources, title : "sources_list"};
-            res.render('sources_list', res_data);
+            let res_data = {status : "Получен список источников", sources : sources, title : "sources_list"};
+            res.render('add_source', res_data);
         }).catch(reject => {console.log('bad');res.status(500).send(reject)});
         //res.render('test_ejs', {status : "sources_list_request", sources : ['s1', 's2']});
-
     });
+
+    app.post(prefix.concat('/get_source/'), function(req, res, next) {
+        var source_url = req.body.source_url;
+        console.log('get source request ' + source_url);
+        var promises = [];
+        source_manager.getSourceByUrl(source_url).then(source => {
+            let res_data = {status : "Получены данные источника", source : source,  title : "Данные источника"};
+            //console.log(source);
+            res.render('source_details', res_data);
+        }, rejected => {
+            let res_data = {status : "Источник не найден", title : "sources_list"};
+            console.log(rejected);
+            res.render('source_details', res_data);
+        }
+        ).catch(reject => {
+            console.log('bad');res.status(500).send(reject)});
+    });
+
     app.post(prefix.concat('/add_source'), function(req, res, next) {
         console.log('requesting source addition');
         var source_url = req.body.source_url,
@@ -26,6 +42,10 @@ var setRoutes = function(app) {
         console.log('add request ' + source_url + ' ' + source_type);
         res.render('index', {title : "Add source "});
     });
+
+
+
+
     app.post(prefix.concat('/delete_source'), function(req, res, next) {
         console.log('requesting source deletion');
         var source_url = req.body.source_url,

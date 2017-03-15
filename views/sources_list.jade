@@ -1,10 +1,21 @@
 //
    Created by Дмитрий on 06.12.2016.
 //
-//extends layout
-
+extends layout
+h1= status
 
 block content
-    each source in sources
-        source
-//block add_source_form
+    //список ресурсов и возможных действий с ними
+    - var i = 0;
+    ul
+        each source in sources
+            - i++;
+            li
+                p= i + "  " + source.name + ": " + source.type
+                form(action='/sources/get_source/', name="add_source_form", method="post")
+                    input(type="hidden", name="source_url", value = source.url)
+                    div.actions
+                        input(type="submit", value="Изменить")
+                //a(href="get_source/" + source._id) Изменить
+    block sources_form
+

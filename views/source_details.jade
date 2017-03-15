@@ -1,0 +1,20 @@
+//
+   Created by Дмитрий on 15.03.2017.
+extends layout
+
+h3= title
+block content
+    div.info
+        p= "Название источника: " + source.name
+        p= "URL: " + source.url
+        p= "Описание : " + source.description
+        p= "Добавлен пользователем: " + source.added_by_user
+        p= "Последнее обновление: " + source.updated_at
+        p= "Состояние: " + source.parse_state
+
+
+
+
+
+
+

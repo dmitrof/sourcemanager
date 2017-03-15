@@ -23,7 +23,12 @@ var getFilteredSources = function(filter_data) {     /*TODO написать о�
         Source.find({}, function(err, docs) {
             if (err) reject(err);
             else {
-                resolve(docs);
+                if (Array.isArray(docs))
+                    resolve(docs);
+                else {
+                    sources.push(docs);
+                    resolve(sources);
+                }
             }
         })
 
@@ -170,6 +175,7 @@ module.exports.saveSource = saveSource;
 
 
 var getSourceByUrl = function(source_url) {
+
     return new Promise(function(resolve, reject) {
         Source.findOne({ url : source_url}, function(err, doc) {
             if (err) {
@@ -177,7 +183,7 @@ var getSourceByUrl = function(source_url) {
                 reject(err)
             }
             else {
-
+                if (!doc) reject('source not found ' + source_url);
                 resolve(doc);
             }
         });
