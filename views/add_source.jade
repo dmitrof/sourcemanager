@@ -1,12 +1,12 @@
 //
    Created by Дмитрий on 23.11.2016.
-extends sources_list
+extends sources_list.pug
 
 block content
 
     //p Hello page shown HELLO HELLO HELLO #{title}
 
-    form(action='/add_source/', name="add_source_form", method="post")
+    form(action='/sources/add_source/', name="add_source_form", method="post")
         div.input
             span.label source type
             br

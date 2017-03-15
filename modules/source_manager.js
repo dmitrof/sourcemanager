@@ -10,11 +10,26 @@ var ParserInfo = core_schemas.Parser;
 var Item = core_schemas.Item;
 
 
-module.exports.setDB = function(_db) {
-    db = _db;
-};
+
 sources_types = require('./../config/source_types');
 sources_urls = require('./../config/source_domain');
+
+/* возвращает список источников */
+var getFilteredSources = function(filter_data) {     /*TODO написать обработку filter_data, когда появится GUI */
+
+    return new Promise(function(resolve, reject) {
+        if (filter_data) {reject('filter feature is not developed yet'); return;}
+        var sources = [];
+        Source.find({}, function(err, docs) {
+            if (err) reject(err);
+            else {
+                resolve(docs);
+            }
+        })
+
+    });
+};
+module.exports.getSources = getFilteredSources;
 
     //adding source to database. URL validation required
 var addSource = function(source_url, source_type, source_info) {

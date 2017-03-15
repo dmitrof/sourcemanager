@@ -4,11 +4,20 @@
 var express = require('express');
 var router = express.Router();
 var prefix = '/sources';
+var source_manager = require('./../modules/source_manager');
 
 var setRoutes = function(app) {
-    app.get(prefix.concat('/sources_list'), function(req, res, next) {
+    //TODO здесь должны учитываться данные фильтров
+    app.get(prefix.concat('/'), function(req, res, next) {
         console.log('requesting sources list');
-        res.render('add_source', {title : "Add source"});
+        //filter_data = {key }
+        source_manager.getSources().then(sources => {
+            //res.send('yeah');
+            res_data = {status : "sources_list_request", sources : sources, title : "sources_list"};
+            res.render('sources_list', res_data);
+        }).catch(reject => {console.log('bad');res.status(500).send(reject)});
+        //res.render('test_ejs', {status : "sources_list_request", sources : ['s1', 's2']});
+
     });
     app.post(prefix.concat('/add_source'), function(req, res, next) {
         console.log('requesting source addition');
