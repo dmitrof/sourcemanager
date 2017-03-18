@@ -7,7 +7,7 @@ var dbWrapper = require('./../modules/db_wrapper');
 dbWrapper.initDB().then(response => {
     var parserManager = require('./../modules/parser_manager');
     var sourceManager = require('./../modules/source_manager');
-    var ParserModel = require('./../models/core_schemas').Parser;
+    var ParserModel = require('./../models/parser');
     var parserName = "shta"; sourceType = "shtasource";
     parser = new ParserModel({
             name : parserName,

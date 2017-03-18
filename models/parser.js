@@ -14,8 +14,26 @@ var parsersSchema = new Schema({
     created_at : {type: Date},
     updated_at : {type: Date}
 }, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "parsers"});
-parsersSchema.methods.attachMetadata = function(_metadata) {
-    this.metadata = _metadata;
+
+parsersSchema.methods = {
+    attachMetadata : function(_metadata) {
+        this.metadata = _metadata;
+    }
 };
+
+parsersSchema.statics = {
+    load : function(_id) {
+        return this.findOne({ _id }).exec();
+    },
+    loadByName : function(_name) {
+        console.log("called loadbyname");
+        return this.findOne({ name : _name }).exec();
+    }
+
+};
+
+
+
+
 
 module.exports = mongoose.model('Parser',parsersSchema);

@@ -24,5 +24,12 @@ class ErrorResult {
     }
 }
 
+class SaveResult {
+    constructor(status, reason) {
+        this.status = status;
+        this.reason = reason;
+    }
+}
+
 module.exports.FetchDocResult = FetchDocResult;
 module.exports.ErrorResult = ErrorResult;

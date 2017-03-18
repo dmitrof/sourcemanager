@@ -6,6 +6,7 @@ var router = express.Router();
 var prefix = '/sources';
 var source_manager = require('./../modules/source_manager');
 var item_manager = require('./../modules/item_manager');
+var source_controller = require('./../controllers/source_controller');
 
 var setRoutes = function(app) {
     //TODO здесь должны учитываться данные фильтров
@@ -64,15 +65,7 @@ var setRoutes = function(app) {
 
     });
 
-    app.post(prefix.concat('/add_source'), function(req, res, next) {
-        console.log('requesting source addition');
-        var source_url = req.body.source_url,
-            source_type = req.body.source_type;
-        console.log('add request ' + source_url + ' ' + source_type);
-        res.render('index', {title : "Add source "});
-    });
-
-
+    app.post(prefix.concat('/add_source'), source_controller.addSource);
 
 
     app.post(prefix.concat('/delete_source'), function(req, res, next) {

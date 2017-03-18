@@ -36,13 +36,14 @@ var getFilteredSources = function(filter_data) {     /*TODO написать о�
 module.exports.getSources = getFilteredSources;
 
     //adding source to database. URL validation required
-var addSource = function(source_url, source_type, source_info) {
+var addSource = function(source_data) {
     return new Promise(function(resolve, reject) {
-        var promises = [];
-        fetchSourceMetadata(source_url).then(metadata => {
+        fetchSourceMetadata(source_data.url).then(metadata => {
                 let source_info = {
-                    url: source_url,
-                    type: source_type,
+                    url: source_data.url,
+                    type: source_data.type,
+                    name: source_data.name,
+                    description : source_data.description,
                     metadata : metadata
                 };
                 return source_info;
@@ -51,9 +52,10 @@ var addSource = function(source_url, source_type, source_info) {
                 console.log("failed to fetch metadata:".concat(reject));
                 return source_info;
                 let source_info = {
-                    url: source_url,
-                    type: source_type,
-                    metadata : metadata
+                    url: source_data.url,
+                    type: source_data.type,
+                    name: source_data.name,
+                    description : source_data.description,
                 };
             }
         ).then(source_info => {
@@ -69,15 +71,14 @@ var addSource = function(source_url, source_type, source_info) {
 
 module.exports.addSource = addSource;
 
-
 /* добавляет ресурс, после чего вызывает его парсинг */
-var addAndParseSource = function(source_url, source_type, info) {
+var addAndParseSource = function(source_data) {
     return new Promise((resolve, reject) => {
-        addSource(source_url, source_type, info).then(
+        addSource(source_data).then(
             source_added => {
-                console.log("Source " + source_url + " parsing has started");
-                parseSource(source_url, source_type).then(parserResponse => {
-                    console.log("Source " + source_url + " parsing has finished");
+                console.log("Source " + source_data.url + " parsing has started");
+                parseSource(source_data.url, source_data.type).then(parserResponse => {
+                    console.log("Source " + source_data.url + " parsing has finished");
                     saveItems(parserResponse);
                 },
                     parser_rejected => console.log("parser rejected ".concat(reject))

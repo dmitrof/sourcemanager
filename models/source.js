@@ -14,15 +14,16 @@ var sourceSchema = new Schema({
     created_at : {type: Date},
     parse_state : {type : String, required: true, enum : ['pending', 'parsed', 'parse_not_possible'], default : 'pending'},
     updated_at : {type: Date},
-    extras : {},
-    metadata : {}
+    metadata : {},
+    features : {}
 } , {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "sources"});
 
-sourceSchema.methods.attachExtras = function(_extras) {
-    this.extras = _extras;
-};
 sourceSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;
 };
+sourceSchema.methods.attachFeatures = function(_features) {
+    this.features = _features;
+};
+
 
 module.exports = mongoose.model('Source', sourceSchema);

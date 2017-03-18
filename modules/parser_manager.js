@@ -2,7 +2,7 @@
  * Created by Дмитрий on 01.03.2017.
  */
 
-var Parser = require('./../models/sourcetype');
+var Parser = require('./../models/parser');
 
 var getParserByType = function(source_type) {
     return new Promise(function(resolve, reject) {
@@ -18,6 +18,18 @@ var getParserByType = function(source_type) {
         });
     });
 };
+
+async function create(req) {
+   //Parser.save(req.data);
+}
+
+var getParserByName = async function(_name) {
+    return await(Parser.loadByName(_name));
+};
+
+
+
+module.exports.getParserByName = getParserByName;
 
 var saveParserData = function(parser_model) {
     return new Promise(function (resolve, reject) {

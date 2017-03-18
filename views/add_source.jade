@@ -7,14 +7,24 @@ block sources_form
     //p Hello page shown HELLO HELLO HELLO #{title}
     form(action='/sources/add_source/', name="add_source_form", method="post")
         div.input
+            span.label Название источника
+            br
+            input(type="text", name="name", placeholder="Название источника")
+            br
+        div.input
+            span.label Описание источника
+            br
+            input(type="text", name="description", placeholder="Описание источника", value="Опишите источник")
+            br
+        div.input
             span.label Тип источника
             br
-            input(type="text", name="source_type", placeholder="source_type")
+            input(type="text", name="source_type", placeholder="Тип источника")
             br
         div.input
             span.label URL источника
             br
-            input(type="text", name="source_url", placeholder="source_url")
+            input(type="text", name="source_url", placeholder="URL источника")
         div.actions
             input(type="submit", value="add")
 
