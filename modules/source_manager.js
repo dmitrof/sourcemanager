@@ -3,17 +3,15 @@
  */
 var parser_manager = require('./../modules/parser_manager');
 var item_manager = require('./../modules/item_manager');
-var core_schemas = require('./../models/core_schemas');
-var Source = core_schemas.Source;
-var SourceType = core_schemas.SourceType;
-var ParserInfo = core_schemas.Parser;
-var Item = core_schemas.Item;
+var mongoose = require('mongoose');
+var SourceType = require('./../models/sourcetype');
+var ParserInfo = require('./../models/parser');
+
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
 
-
-sources_types = require('./../config/source_types');
-sources_urls = require('./../config/source_domain');
+var Item = require('./../models/item');
+var Source = require('./../models/source');
 
 /* возвращает список источников */
 var getFilteredSources = function(filter_data) {     /*TODO написать обработку filter_data, когда появится GUI */

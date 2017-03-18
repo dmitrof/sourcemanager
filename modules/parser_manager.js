@@ -1,12 +1,12 @@
 /**
  * Created by Дмитрий on 01.03.2017.
  */
-var core_schemas = require('./../models/core_schemas');
-var ParserInfo = core_schemas.Parser;
+
+var Parser = require('./../models/sourcetype');
 
 var getParserByType = function(source_type) {
     return new Promise(function(resolve, reject) {
-        ParserInfo.findOne({ source_type : source_type}, function(err, doc) {
+        Parser.findOne({ source_type : source_type}, function(err, doc) {
             if (err) {
                 console.log("findone error");
                 reject(err)
@@ -37,7 +37,7 @@ var saveParserData = function(parser_model) {
 
 var removeParserByType = function(source_type) {
     return new Promise(function(resolve, reject) {      //TODO убрать findOne
-        ParserInfo.remove({ source_type : source_type}, function(err) {
+        Parser.remove({ source_type : source_type}, function(err) {
             if (err) {
                 console.log("removeParserByType error");
                 reject(err)
@@ -52,7 +52,7 @@ var removeParserByType = function(source_type) {
 
 var removeParserByField = function(key, value) {
     return new Promise(function(resolve, reject) {      //TODO убрать findOne
-        ParserInfo.remove({ source_type : source_type}, function(err) {
+        Parser.remove({ source_type : source_type}, function(err) {
             if (err) {
                 console.log("removeParserByType error");
                 reject(err)

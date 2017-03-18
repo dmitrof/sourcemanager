@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var sources_routes = require('./routes/sources');
+var sources_routes = require('./routes/sources_routes');
 var item_routes = require('./routes/items');
 
 var app = require('express')();
@@ -35,6 +35,8 @@ app.set('port', port);
 console.log('sup');
 /*точка входа - подключение к БД */
 dbWrapper.initDB().then(db_connected => {
+
+
     console.log('starting app init');
     initRoutes();
     app.listen(app.get('port'), function() {
@@ -65,6 +67,10 @@ function normalizePort(val) {
 
 module.exports = app;
 
+
+/*function initSchemas() {
+    require('models');
+}*/
 
 
 function initRoutes() {

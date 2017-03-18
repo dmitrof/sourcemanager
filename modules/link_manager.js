@@ -1,12 +1,10 @@
 /**
  * Created by Дмитрий on 18.12.2016.
  */
-
-var core_schemas = require('./../models/core_schemas');
 var item_manager = require('./../modules/item_manager');
-var ItemLinkModel = core_schemas.ItemLink;
-var ItemModel = core_schemas.Item;
-var LinkTagModel = core_schemas.LinkTag;
+var ItemLinkModel = require('./../models/itemlink');
+var ItemModel = require('./../models/item');
+var LinkTagModel = require('./../models/linktag');
 var ontology_provider = require('./../modules/ontology_provider');
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;

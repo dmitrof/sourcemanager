@@ -2,8 +2,7 @@
  * Created by Дмитрий on 13.03.2017.
  * решил перенести работу с item-ми из sourcemanager
  */
-var core_schemas = require('./../models/core_schemas');
-var Item = core_schemas.Item;
+var Item = require('./../models/item');
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
 

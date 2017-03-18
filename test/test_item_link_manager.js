@@ -24,7 +24,7 @@ dbWrapper.initDB().then(response => {
     var tag_text = "PCA tag";
     var nodelist = ['aaaabbbbcccc', 'node2', 'node3']; tag_data = {nodes : nodelist};
     link_manager.removeTagByText(tag_text).then(tagRemoved => {
-        console.log(tagRemoved); return link_manager.addTag(tag_text,tag_data );
+        console.log(tagRemoved); return link_manager.addTag(tag_text,tag_data);
     }).then(tagAdded => {
         console.log(tagAdded);
         return link_manager.addLinksByTag(item_name, tag_text, 'nothing here')
