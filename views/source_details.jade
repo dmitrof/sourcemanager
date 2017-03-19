@@ -19,11 +19,12 @@ block content
         each item in items
             - i++;
             p= i + "  " + item.title + ": " + item.type
-            a(href="/get_item/"+item.name) изменить
-            form(action='/get_item/', name="add_source_form", method="post")
+            //form(action='/get_item/', name="add_source_form", method="post")
                 input(type="hidden", name="item_name", value = item.name)
                 div.actions
                     input(type="submit", value="Изменить")
+            a(href="/get_item?item_name=" + item.name) Изменить
+
 
 
 

@@ -45,9 +45,13 @@ var getItemByName = function(item_name) {
         Item.findOne({name : item_name}, {}, { sort : {'created_at' : -1 }}, function(err, doc) {
             if (err)
                 reject(new ErrorResult('db_fail', err));
-            else
-                console.log(doc);
-                resolve(new FetchDocResult('Документ', 'success', doc));
+            else {
+                if (doc)
+                    resolve (new FetchDocResult(true, 'Получен документа', doc));
+                else
+                    resolve (new FetchDocResult(false, 'Документ с именем ' + item_name + ' не найден'));
+            }
+                //console.log(doc);
         })
 
 

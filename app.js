@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var sources_routes = require('./routes/sources_routes');
 var parser_routes = require('./routes/parser_routes');
-var item_routes = require('./routes/items');
+var item_routes = require('./routes/item_routes');
 
 var app = require('express')();
 var debug = require('debug')('express-parser-3:server');

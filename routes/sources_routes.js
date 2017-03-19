@@ -12,9 +12,9 @@ var setRoutes = function(app) {
     //TODO здесь должны учитываться данные фильтров
     app.get(prefix.concat('/'), function(req, res, next) {
         console.log('requesting sources list');
-        //filter_data = {key }
+        var status = req.query.status;
         source_manager.getSources().then(sources => {
-            let res_data = {status : "Получен список источников", sources : sources, title : "sources_list"};
+            let res_data = {status : status, sources : sources, title : "sources_list"};
             res.render('add_source', res_data);
         }).catch(reject => {console.log('bad');res.status(500).send(reject)});
         //res.render('test_ejs', {status : "sources_list_request", sources : ['s1', 's2']});
@@ -88,6 +88,54 @@ var setRoutes = function(app) {
     app.post('/add_source_type', source_controller.createSourceType);
 
     app.post('/delete_source_type', source_controller.deleteSourceType);
+
+
+
+    app.get(prefix.concat('/get_source/'), function(req, res, next) {
+        var source_url = req.query.source_url;
+        console.log('get source request ' + source_url);
+        var promises = [];
+        var res_data = {title : "Данные источника"};
+
+        var getSourcePromise = source_manager.getSourceByUrl(source_url);
+        getSourcePromise.then(result => {
+                res_data.source = result.data;
+                res_data.source_status = result.status;
+                console.log(result.message);
+            },
+            rejected => {
+                if (!rejected.hasOwnProperty('err')) {
+                    res_data.source_status = rejected.status;
+                }
+            }
+        ).catch(err =>
+            console.log(err)
+        );
+        var getItemsPromise = item_manager.getAllItemsForSource(source_url);
+        getItemsPromise.then(result => {
+            res_data.items = result.data;
+            res_data.items_status = result.status;
+            console.log(result.message);
+        }, rejected => {
+            if (!rejected.hasOwnProperty('err')) {
+                res_data.items_status = rejected.status;
+            }
+        }).catch(err =>
+            console.log(err)
+        );
+
+        promises.push(getSourcePromise); promises.push(getItemsPromise);
+        Promise.all(promises).then(resolved => {
+            res.render('source_details', res_data);
+        }, rejected => {
+            if (rejected.hasOwnProperty('err'))
+                res.status(500).send(rejected.err);
+            else
+                res.render('source_details', res_data);
+        });
+
+    });
+
 
     console.log('app routes for sources are set');
 };

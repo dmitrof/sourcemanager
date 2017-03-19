@@ -10,8 +10,8 @@
     data - документ (которого может и не быть)
 * */
 class FetchDocResult {
-    constructor(status, message, data) {
-        this.status = status;
+    constructor(success, message, data) {
+        this.success = success;
         this.message = message;
         this.data = data;
     }
