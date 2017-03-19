@@ -85,10 +85,12 @@ var setRoutes = function(app) {
 
 
 
-    app.get(prefix.concat('/source_types'), function(req, res, next) {
-        console.log('requesting source types list');
-        res.render('index', {title : "source TYPE"});
-    });
+    app.get(prefix.concat('/source_types'), source_controller.getSourceTypes);
+
+
+
+
+
 
     app.post(prefix.concat('/add_source_type'), function(req, res, next) {
         console.log('requesting source TYPE addition');

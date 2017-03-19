@@ -212,6 +212,12 @@ getUrlDomain = function(source_url, callback) { //TODO а надо ли вооб
     return 'www.youtube.com';
 };
 
+module.exports.getSourceTypes = function() {
+    return SourceType.find({}).exec();
+};
+
+
+
 
 
 
