@@ -9,9 +9,11 @@ var Schema = mongoose.Schema;
 var sourceTypesSchema = new Schema({
     type : { type: String, required: true, unique: true},
     description : { type: String,  default : "Undescribed source"},
+    parser : {type : String},
     metadata : {},
     created_at : {type: Date},
-    updated_at : {type: Date}
+    updated_at : {type: Date},
+    added_by : {type: String, require: true}
 }, {timestamps : { createdAt : 'created_at', updatedAt : 'updated_at'}}, {collection : "source_types"});
 sourceTypesSchema.methods.attachMetadata = function(_metadata) {
     this.metadata = _metadata;

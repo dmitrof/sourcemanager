@@ -1,0 +1,47 @@
+//
+   Created by Дмитрий on 14.03.2017.
+
+extends layout
+
+block content
+    h3 Список доступных парсеров
+    //список ресурсов и возможных действий с ними
+    - var i = 0;
+    ul
+        each parser in parser_list
+            - i++;
+            li
+                p= i + "  " + parser.name + ": " + parser.description
+                p= "Автономный: " + parser.standalone + "; Сохраняет в базу мультимедиа: " + parser.saves_attachments
+                form(action='/delete_parser', name="delete_parser", method="post")
+                    input(type="hidden", name="parser_id", value = parser.id)
+                    input(type="hidden", name="parser_name", value = parser.name)
+                    div.actions
+                        input(type="submit", value="Удалить")
+                br
+                a(href="get_parser?parser=" + parser.id + "&parser_name=" + parser.name) Изменить
+
+    block add_parser_form
+        h3 Добавить новый парсер
+        //p Hello page shown HELLO HELLO HELLO #{title}
+        form(action='/add_parser/', name="add_parser_form", method="post")
+            div.input
+                span.label Имя парсера
+                br
+                input(type="text", name="name", placeholder="Имя парсера")
+                br
+            div.input
+                span.label Описание парсера
+                br
+                input(type="text", name="description", placeholder="Описание источника", value="Опишите парсер")
+                br
+            div.input
+                input(type="checkbox", name="saves_attachments", value=false)
+                span.label Парсер сохраняет мультимедиа-данные
+                br
+            div.input
+                input(type="checkbox", name="standalone", value=false)
+                span.label Парсер является независимым приложением
+
+            div.actions
+                input(type="submit", value="add")

@@ -1,8 +1,8 @@
-var dbWrapper = require('./../modules/db_wrapper');
+var dbWrapper = require('./../../modules/db_wrapper');
 
 
 dbWrapper.initDB().then(response => {
-    var sourceManager = require('./../modules/source_manager');
+    var sourceManager = require('./../../modules/source_manager');
     var Source = require('./../models/core_schemas').Source;
     var source_url = "www.com"; var source_type = "hzchto";
 

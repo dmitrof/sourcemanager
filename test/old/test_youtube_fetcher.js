@@ -1,7 +1,7 @@
 /**
  * Created by Дмитрий on 13.03.2017.
  */
-var youtube_fetcher = require('./../modules/youtube_fetcher');
+var youtube_fetcher = require('./../../modules/youtube_fetcher');
 
 //youtube_fetcher.parseDefault("channel", function() {console.log("callback")});
 

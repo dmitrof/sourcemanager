@@ -3,83 +3,46 @@
  */
 
 var Parser = require('./../models/parser');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var CreateResult = require('./../modules/AsyncResult').CreateResult;
 
-var getParserByType = function(source_type) {
-    return new Promise(function(resolve, reject) {
-        Parser.findOne({ source_type : source_type}, function(err, doc) {
-            if (err) {
-                console.log("findone error");
-                reject(err)
-            }
-            else {
-                //console.log(data);
-                resolve(doc);
-            }
-        });
-    });
+
+var getParsers = function(_id) {
+    return Parser.find({}).exec();
 };
+module.exports.getParsers = getParsers;
 
-async function create(req) {
-   //Parser.save(req.data);
-}
-
-var getParserByName = async function(_name) {
-    return await(Parser.loadByName(_name));
+var getParser = function(parser_id) {
+    return Parser.findOne({_id: Schema.Types.ObjectId(parser_id)}).exec();
 };
-
-
-
+module.exports.getParser = getParser;
+var getParserByName = function(parser_name) {
+    return Parser.findOne({name : parser_name}).exec();
+};
 module.exports.getParserByName = getParserByName;
 
-var saveParserData = function(parser_model) {
-    return new Promise(function (resolve, reject) {
-        parser_model.save(function (err) {
-            if (err) {
-                console.log("saveParserData error: " + err);
-                reject(err);
-            }
-            else {
-                console.log(parser_model.name + "saved to db");
-                resolve(parser_model);
-            }
 
-        })
-    })
+async function createParser(data) {
+    var result = await getParserByName(data.name);
+    if (result) {
+        return new CreateResult(false, "Уже есть парсер с именем ".concat(data.name));
+    }
+    var parser = new Parser(data);
+    var save_result = await parser.save();
+    return new CreateResult(true, "Сохранен ".concat(data.name));
+}
+module.exports.createParser = createParser;
+
+/*var getParserByName = async function(_name) {
+    return await(Parser.loadByName(_name));
 };
+module.exports.getParserByName = getParserByName;*/
 
-var removeParserByType = function(source_type) {
-    return new Promise(function(resolve, reject) {      //TODO убрать findOne
-        Parser.remove({ source_type : source_type}, function(err) {
-            if (err) {
-                console.log("removeParserByType error");
-                reject(err)
-            }
-            else {
-                console.log(source_type.concat("removed"));
-                resolve("parser for source type \"".concat(source_type).concat("\" removed"));
-            }
-        });
-    });
+var deleteParser = function(parser_id) {
+    return Parser.remove({_id : parser_id}).exec();
 };
-
-var removeParserByField = function(key, value) {
-    return new Promise(function(resolve, reject) {      //TODO убрать findOne
-        Parser.remove({ source_type : source_type}, function(err) {
-            if (err) {
-                console.log("removeParserByType error");
-                reject(err)
-            }
-            else {
-                resolve(parser_model.name + "removed");
-            }
-        });
-    });
-};
+module.exports.deleteParser = deleteParser;
 
 
-
-module.exports.getParserByType = getParserByType;
-module.exports.removeParserByType = removeParserByType;
-module.exports.removeParserByField = removeParserByField;
-module.exports.saveParserData = saveParserData;
 

@@ -2,12 +2,12 @@
  * Created by Дмитрий on 18.03.2017.
  */
 
-var dbWrapper = require('./../modules/db_wrapper');
+var dbWrapper = require('./../../modules/db_wrapper');
 
 dbWrapper.initDB().then(response => {
-    var parserManager = require('./../modules/parser_manager');
-    var sourceManager = require('./../modules/source_manager');
-    var ParserModel = require('./../models/parser');
+    var parserManager = require('./../../modules/parser_manager');
+    var sourceManager = require('./../../modules/source_manager');
+    var ParserModel = require('./../../models/parser');
     var parserName = "shtaa";
     sourceType = "shtasource";
     var parser = new ParserModel({

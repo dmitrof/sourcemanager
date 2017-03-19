@@ -1,0 +1,25 @@
+//
+   Created by Дмитрий on 19.03.2017.
+extends source_types
+
+block add_source_type_form
+    h3 Добавить новый тип источника
+    //p Hello page shown HELLO HELLO HELLO #{title}
+    form(action='/add_source_type/', name="add_source_type_form", method="post")
+        div.input
+            span.label Тип источника
+            br
+            input(type="text", name="type", placeholder="тип источника")
+            br
+        div.input
+            span.label Описание источника
+            br
+            input(type="text", name="description", placeholder="Описание типа источника", value="Опишите тип источника")
+            br
+        div.input
+            span.label Парсер источника
+            br
+            input(type="text", name="parser", placeholder="Парсер источника")
+            br
+        div.actions
+            input(type="submit", value="add")

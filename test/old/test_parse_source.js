@@ -1,11 +1,11 @@
 /**
  * Created by Дмитрий on 14.03.2017.
  */
-var dbWrapper = require('./../modules/db_wrapper');
+var dbWrapper = require('./../../modules/db_wrapper');
 
 dbWrapper.initDB().then(response => {
-    var sourceManager = require('./../modules/source_manager');
-    var parserManager = require('./../modules/parser_manager');
+    var sourceManager = require('./../../modules/source_manager');
+    var parserManager = require('./../../modules/parser_manager');
     var core_schemas = require('./../models/core_schemas');
     var Source = core_schemas.Source;
     var ParserModel = core_schemas.Parser;

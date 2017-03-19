@@ -1,0 +1,13 @@
+//
+   Created by Дмитрий on 19.03.2017.
+
+extends layout
+//TODO необходимо придумать, как правильно выводить метаданные. Возможно придется добавить файлик, который будет переводить на русский поля метаданных
+block content
+    div.parser_info
+        h2= "Описание парсера"
+        p= "Название: " + parser_info.name
+        p= "Описание: " + parser_info.description
+        p= "Сохраняет аттачменты " + parser_info.saves_attachments
+        p= "Приложение: " + parser_info.standalone
+

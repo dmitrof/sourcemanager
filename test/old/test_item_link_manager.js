@@ -1,10 +1,10 @@
 /**
  * Created by Дмитрий on 10.03.2017.
  */
-var dbWrapper = require('./../modules/db_wrapper');
+var dbWrapper = require('./../../modules/db_wrapper');
 
 dbWrapper.initDB().then(response => {
-    var link_manager = require('./../modules/link_manager');
+    var link_manager = require('./../../modules/link_manager');
     var core_schemas = require('./../models/core_schemas');
     var ItemLinkModel = core_schemas.ItemLink;
     var item_name = 'youtube6r_aaZ0FpAw'; var node_id = 'aaaabbbbcccc'; var node_name = 'something about PCA';

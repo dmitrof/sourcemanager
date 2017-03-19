@@ -23,13 +23,15 @@ class ErrorResult {
         this.err= err;
     }
 }
-
-class SaveResult {
-    constructor(status, reason) {
-        this.status = status;
-        this.reason = reason;
+/* success - булево поле, указывающее на успешность операции. Message - для вывода пользователю*/
+class CreateResult {
+    constructor(success, message, err) {
+        this.status = success;
+        this.message = message;
+        this.err = err;
     }
 }
 
 module.exports.FetchDocResult = FetchDocResult;
 module.exports.ErrorResult = ErrorResult;
+module.exports.CreateResult = CreateResult;

@@ -216,7 +216,15 @@ module.exports.getSourceTypes = function() {
     return SourceType.find({}).exec();
 };
 
+module.exports.createSourceType = function(data) {
+    console.log(data);
+    var source_type = new SourceType(data);
+    return source_type.save(data);
+};
 
+module.exports.deleteSourceType = function(source_type_id) {
+    return SourceType.remove({_id : source_type_id});
+}
 
 
 
