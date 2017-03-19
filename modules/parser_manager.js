@@ -6,10 +6,17 @@ var Parser = require('./../models/parser');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var CreateResult = require('./../modules/AsyncResult').CreateResult;
+var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 
 
-var getParsers = function(_id) {
-    return Parser.find({}).exec();
+var getParsers = async function() {
+    var docs = await Parser.find({}).exec();
+    if (docs) {
+        return new FetchDocResult(true, 'Документы получены', docs);
+    }
+    else {
+        return new FetchDocResult(false, 'Документы не найден', docs);
+    }
 };
 module.exports.getParsers = getParsers;
 
@@ -33,7 +40,6 @@ async function createParser(data) {
     return new CreateResult(true, "Сохранен ".concat(data.name));
 }
 module.exports.createParser = createParser;
-
 /*var getParserByName = async function(_name) {
     return await(Parser.loadByName(_name));
 };

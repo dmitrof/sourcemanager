@@ -62,7 +62,6 @@ module.exports.getParser = async function(req, res, next) {
     try {
         var result = await parser_manager.getParserByName(req.query.parser_name);
         console.log(result);
-        let status = "Парсер ".concat(result.name).concat(" получен");
         res.render('parser_info', {status : status, parser_info : result})
     }
     catch (err){
