@@ -8,6 +8,7 @@ var LinkTagModel = require('./../models/linktag');
 var ontology_provider = require('./../modules/ontology_provider');
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
+var CreateResult = require('./../modules/AsyncResult').CreateResult;
 
 
 var getAllLinks = function() {
@@ -37,7 +38,7 @@ var getLinksByItem = function(_item_name) {
             }
             else {
                 //console.log(docs);
-                resolve(new FetchDocResult('Связи с дидактическими единицами', 'success', docs));
+                resolve(new FetchDocResult(true, 'success', docs));
             }
         });
     });
@@ -66,7 +67,7 @@ var addItemLink = function(_item_name, node_id, node_data) {
             }
             else {
                 //console.log("itemLink for " + itemLink.item_name + "saved to db");
-                resolve("itemLink for " + itemLink.item_name + " saved to db");
+                resolve(new CreateResult(true, 'Связь добавлена', null));
             }
 
         })

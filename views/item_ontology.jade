@@ -3,9 +3,50 @@
 extends layout
 
 block content
-    p= "Контент: " + item.title
-    div.ontology
-    h3="Онтология :" + ontology_status
-    p= ontology
-    - console.log(ontology);
+    block ontology
+        h3= "Контент: " + item.title
+        div.ontology
+        h4="Онтология :" + ontology_status
+        //p= ontology
+        //- console.log(ontology);
+        - function parseOntologyNode(node) {
+            p= "Имя единицы: " + node.name
+            p= "Описание: " + node.description
+            //TODO форма для добавления связи.  В будущем переработать
+            form(action='/add_link_for_item/', name="add_source_form", method="post")
+                input(type="hidden", name="item_name", value = item.name)
+                input(type="hidden", name="node_id", value = node.id)
+                input(type="hidden", name="node_description", value = node.description)
+                div.actions
+                    input(type="submit", value="Привязать")
+            p
+                b Разделы:
+            - var children = node.children;
+            ul
+                - children.forEach(function(child, i, children) {
+                li
+                    - parseOntologyNode(child);
+
+                - });
+
+
+        - }
+        ul
+            each node in ontology
+                li
+                    - parseOntologyNode(node);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

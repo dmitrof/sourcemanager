@@ -11,16 +11,19 @@ block content
         p= "URL источника " + item.source_url
         p= "Дата последнего обновления " + item.updated_at
 
-    div.item_links
-        h2= "Связи"
-        a(href="/get_item/get_ontology?item_name=" + item.name + "&item_title=" + item.title + "&ontology_pararms=none") Добавить связь
-        h4= item_links_status
-        - var i = 0;
-        each item_link in item_links
-            - i++;
-            p= i + "  " + item_link.node_name + ": " + item_link.node_description
-            form(action='/delete_item_link/', name="delete_item_link_form", method="post")
-                input(type="hidden", name="item_link_id", value = item_link._id)
-                div.actions
-                    input(type="submit", value="Удалить")
+    block ontology
+    block item_links
+        div.item_links
+            h2= "Связи"
+            a(href="/get_item/get_ontology?item_name=" + item.name + "&item_title=" + item.title + "&ontology_pararms=none") Добавить связь
+            h4= item_links_status
+            - var i = 0;
+            each item_link in item_links
+                - i++;
+                p= i + "  " + item_link.node_name + ": " + item_link.description
+                form(action='/delete_item_link/', name="delete_item_link_form", method="post")
+                    input(type="hidden", name="item_link_id", value = item_link._id)
+                    div.actions
+                        input(type="submit", value="Удалить")
+
 

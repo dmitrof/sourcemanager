@@ -21,9 +21,15 @@ module.exports.getNodes = getNodes;
 
 var getNodesAndItem = async function(req, res, next) {
     var result = await ontology_provider.requestOntology('sup');
-    var item = {name : req.query.item_name, title : req.query.item_title}
-    res.render('item_ontology', {ontology_status : result.message, ontology : result.data, item : item});
-
+    var item = {name : req.query.item_name, title : req.query.item_title};
+    var status = req.query.status;
+    //parseOntologyNode(result.data);
+    res.render('item_ontology', {ontology_status : result.message, ontology : result.data, item : item, status : status});
 };
-
 module.exports.getNodesAndItem = getNodesAndItem;
+
+module.exports.addLinkForItem = async function(req, res, next) {
+    var result = await link_manager.addItemLink(req.body.item_name, req.body.node_id, {description : req.body.node_description});
+    res.redirect('/get_item/get_ontology?status='.concat(result.message));
+    //parseOntologyNode(result.data);
+};

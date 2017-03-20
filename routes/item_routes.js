@@ -11,7 +11,7 @@ var setRoutes = function(app) {
 
     app.get('/get_item/get_ontology/', link_controller.getNodesAndItem);
     //app.get(prefix.concat('/get_item/get_nodes'), item_controller.getNodesForItem)
-
+    app.post('/add_link_for_item/', link_controller.addLinkForItem);
 };
 module.exports.setRoutes = setRoutes;
 
