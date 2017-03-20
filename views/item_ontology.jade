@@ -5,6 +5,7 @@ extends layout
 block content
     block ontology
         h3= "Контент: " + item.title
+        a(href="/get_item?item_name=" + item.name) Описание контента
         div.ontology
         h4="Онтология :" + ontology_status
         //p= ontology
@@ -19,6 +20,9 @@ block content
                 input(type="hidden", name="node_id", value = node.id)
                 input(type="hidden", name="node_name", value = node.name)
                 input(type="hidden", name="node_description", value = node.description)
+                div.input
+                    input(type="checkbox", name="unique_link", value=false)
+                    span.label Уникальная связь между контентом и онтологией
                 div.actions
                     input(type="submit", value="Привязать")
             p

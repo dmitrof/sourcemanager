@@ -26,7 +26,7 @@ module.exports.ErrorResult = class ErrorResult {
 /* success - булево поле, указывающее на успешность операции. Message - для вывода пользователю*/
 module.exports.CreateResult = class CreateResult {
     constructor(success, message, err) {
-        this.status = success;
+        this.success = success;
         this.message = message;
         this.err = err;
     }

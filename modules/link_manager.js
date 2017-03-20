@@ -2,7 +2,7 @@
  * Created by Дмитрий on 18.12.2016.
  */
 var item_manager = require('./../modules/item_manager');
-var ItemLinkModel = require('./../models/itemlink');
+var ItemLink = require('./../models/itemlink');
 var ItemModel = require('./../models/item');
 var LinkTagModel = require('./../models/linktag');
 var ontology_provider = require('./../modules/ontology_provider');
@@ -13,7 +13,7 @@ var CreateResult = require('./../modules/AsyncResult').CreateResult;
 
 var getAllLinks = function() {
     return new Promise(function(resolve, reject) {
-        ItemLinkModel.find([
+        ItemLink.find([
             { $match : {state : 'active'}},
             { $group : {_id : 'item_name'}}
         ], function(err, docs) {
@@ -28,10 +28,23 @@ var getAllLinks = function() {
         });
     });
 };
+
+var addUniqueItemLink = async function(_item_name, _node_id, node_data) {
+    var result = await ItemLink.getItemNodeLinks(_item_name, _node_id);
+    console.log(result);
+    if (result.length <= 0) {
+        return addItemLink(_item_name, _node_id, node_data);
+    }
+    else {
+        return new CreateResult(false, 'Связь между контентом \"' + _item_name + '\" и дидактической единицей ' + _node_id + ' уже существует',  null);
+    }
+};
+module.exports.addUniqueItemLink = addUniqueItemLink;
+
 /* возвращает все itemLink-и для айтема */
 var getLinksByItem = function(_item_name) {
     return new Promise(function(resolve, reject) {
-        ItemLinkModel.find({ item_name : _item_name}, function(err, docs) {
+        ItemLink.find({ item_name : _item_name}, function(err, docs) {
             if (err) {
                 console.log("findone error");
                 reject(new ErrorResult('db_fail', err));
@@ -59,7 +72,7 @@ var addItemLink = function(_item_name, node_id, node_data) {
             if (node_data.hasOwnProperty(property))
                 metadata[property] = node_data[property];
         }
-        var itemLink = new ItemLinkModel(constr);
+        var itemLink = new ItemLink(constr);
         itemLink.attachMetadata(metadata);
         itemLink.save(function (err) {
             if (err) {
@@ -77,7 +90,7 @@ module.exports.addItemLink = addItemLink;
 /* удаляет вся связи для выбранного item-а */
 var removeAllLinksByItem = function(_item_name) {
     return new Promise(function(resolve, reject) {
-        ItemLinkModel.remove({ item_name : _item_name}, function(err) {
+        ItemLink.remove({ item_name : _item_name}, function(err) {
             if (err) {
                 console.log("removeAllLinksByItem error");
                 reject(new ErrorResult('removeAllLinksByItem error', err));
