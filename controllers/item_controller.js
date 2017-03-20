@@ -27,6 +27,5 @@ module.exports.getItemAndLinks = async function (req, res, next) {
     catch (err) {
         res.status(500).send(err);
     }
-
-
 };
+

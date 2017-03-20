@@ -24,8 +24,12 @@ var getParser = function(parser_id) {
     return Parser.findOne({_id: Schema.Types.ObjectId(parser_id)}).exec();
 };
 module.exports.getParser = getParser;
-var getParserByName = function(parser_name) {
-    return Parser.findOne({name : parser_name}).exec();
+var getParserByName = async function(parser_name) {
+    var doc = await Parser.findOne({name : parser_name}).exec();
+    if (!doc)
+        return new FetchDocResult(false, 'Документ не найден');
+    else
+        return new FetchDocResult(false, 'Документ найден', doc);
 };
 module.exports.getParserByName = getParserByName;
 

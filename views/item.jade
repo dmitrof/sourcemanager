@@ -13,6 +13,7 @@ block content
 
     div.item_links
         h2= "Связи"
+        a(href="/get_item/get_ontology?item_name=" + item.name + "&item_title=" + item.title + "&ontology_pararms=none") Добавить связь
         h4= item_links_status
         - var i = 0;
         each item_link in item_links

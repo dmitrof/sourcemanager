@@ -1,0 +1,22 @@
+{
+  "name" : "Higher-order functions",
+  "description" : "blablabla",
+  "children" : [
+    {"name" : "Composition",
+      "description" : "blablabla",
+      "children" : [
+        {
+          "name" : "Higher-order functions 1",
+          "description" : "blablabla",
+          "children" : []
+        },
+        {
+          "name" : "Higher-order functions 2",
+          "description" : "blablabla",
+          "children" : []
+        }
+
+      ]
+    }
+  ]
+}

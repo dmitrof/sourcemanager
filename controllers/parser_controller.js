@@ -14,8 +14,7 @@ module.exports.getParsers = async function(req, res, next) {
         status = req.query.status;
     try {
         var result = await parser_manager.getParsers();
-        //console.log(result);
-        res.render('parsers', {status : status, parser_list : result});
+        res.render('parsers', {status : result.message, parser_list : result.data});
     }
     catch (err){
         console.log(err);
@@ -62,7 +61,7 @@ module.exports.getParser = async function(req, res, next) {
     try {
         var result = await parser_manager.getParserByName(req.query.parser_name);
         console.log(result);
-        res.render('parser_info', {status : status, parser_info : result})
+        res.render('parser_info', {status : result.message, parser_info : result.data})
     }
     catch (err){
         console.log(err);

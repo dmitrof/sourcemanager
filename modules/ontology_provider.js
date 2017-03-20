@@ -3,6 +3,8 @@
  * точка входа для модуля управления онтологиями
  */
 /*TODO объединить с модулем Игоря */
+var HttpGetResult =  require('./../modules/AsyncResult').HttpGetResult;
+var sampleTree = require('./../modules/sample_tree.json');
 var requestNodesData = function(node_ids) {
   return new Promise((resolve, reject) => {
       //let response = { nodes : []};
@@ -22,12 +24,12 @@ module.exports.requestNodesData = requestNodesData;
 /*вот это будет понятно как делать, когда Игорь подключится */
 var requestOntology = function(params) {
     return new Promise((resolve, reject) => {
-        var res = {}; var nodes = [];
+        /*var res = {}; var nodes = [];
         for (var i = 1; i <= 10; i++) {
             nodes.push({node_id : i, node_name : 'node_'.concat(i), node_description: 'node_description_'.concat(i)});
-        }
-        res.status = 'ok'; res.nodes = nodes;
-        resolve(res);
+        }*/          //res.status = 'ok'; res.nodes = nodes;
+
+        resolve(new HttpGetResult(true, 'Получена онтология по запросу', sampleTree));
     });
 };
 module.exports.requestOntology = requestOntology;
