@@ -30,6 +30,6 @@ module.exports.getNodesAndItem = getNodesAndItem;
 
 module.exports.addLinkForItem = async function(req, res, next) {
     var result = await link_manager.addItemLink(req.body.item_name, req.body.node_id, {description : req.body.node_description});
-    res.redirect('/get_item/get_ontology?status='.concat(result.message));
+    res.redirect('/get_item/get_ontology?status=' + result.message + "&item_name=" + req.body.item_name + "&item_title=" + req.body.item_title);
     //parseOntologyNode(result.data);
 };

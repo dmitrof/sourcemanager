@@ -15,7 +15,9 @@ block content
             //TODO форма для добавления связи.  В будущем переработать
             form(action='/add_link_for_item/', name="add_source_form", method="post")
                 input(type="hidden", name="item_name", value = item.name)
+                input(type="hidden", name="item_title", value = item.title)
                 input(type="hidden", name="node_id", value = node.id)
+                input(type="hidden", name="node_name", value = node.name)
                 input(type="hidden", name="node_description", value = node.description)
                 div.actions
                     input(type="submit", value="Привязать")
