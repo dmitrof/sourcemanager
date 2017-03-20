@@ -22,7 +22,8 @@ block content
                 - i++;
                 p= i + "  " + item_link.node_name + ": " + item_link.description
                 form(action='/delete_item_link/', name="delete_item_link_form", method="post")
-                    input(type="hidden", name="item_link_id", value = item_link._id)
+                    input(type="hidden", name="item_link_id", value = item_link.id)
+                    input(type="hidden", name="item_name", value = item.name)
                     div.actions
                         input(type="submit", value="Удалить")
 

@@ -129,6 +129,15 @@ var addLinksByTag = function(item_name, tag_text, data) {
 };
 module.exports.addLinksByTag = addLinksByTag;
 
+module.exports.removeItemLink = async function(_id) {
+    var doc = await ItemLink.find({_id : _id}).exec();
+    console.log('Перед удалением' + doc);
+    var result = await ItemLink.remove({_id : _id});
+    doc = await ItemLink.find({_id : _id}).exec();
+    console.log('После удаления' + doc);
+    return new CreateResult(true, 'Связь удалена', null);
+};
+
 var getTagByText = function(tag_text) {
     return new Promise(function(resolve, reject) {
         LinkTagModel.findOne({ text : tag_text}, function(err, doc) {

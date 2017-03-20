@@ -8,6 +8,7 @@ var Schema = mongoose.Schema;
 var parsersSchema = new Schema({
     name : { type: String, required: true, unique: true},
     description : {type: String, default : "Undescribed parser"},
+    url : {type: String, default: "No url"},
     saves_attachments : { type: Boolean, required: true, default : false},   //сохраняет ли парсер аттачменты? (для больших файлов)
     standalone : { type: Boolean, required: true, default : false},     //указывает на то, является ли парсер автономным приложением
     metadata : {},

@@ -36,3 +36,15 @@ module.exports.addLinkForItem = async function(req, res, next) {
     res.redirect('/get_item/get_ontology?status=' + result.message + "&item_name=" + req.body.item_name + "&item_title=" + req.body.item_title);
     //parseOntologyNode(result.data);
 };
+
+module.exports.deleteItemLink = async function(req, res, next) {
+    try {
+        var result = await link_manager.removeItemLink(req.body.item_link_id);
+        res.redirect('/get_item?status=' + result.message + '&item_name=' + req.body.item_name);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+
+};
