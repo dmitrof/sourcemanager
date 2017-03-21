@@ -7,7 +7,8 @@ block content
     ol
         each tag in tags
             li
-                p= tag.text
+                p
+                    b= tag.text
                 p= "Описание: " + tag.description
                 p= "Вершины онтологии: "
                 ul
@@ -15,12 +16,17 @@ block content
                         li
                             p= "Имя вершины: " + node.name
                             p= "Описание вершины: " + node.description
+                a(href="/get_tag?tag_text=" + tag.text) Просмотреть
+                form(action='/delete_tag/', name="delete_source_form", method="post")
+                    input(type="hidden", name="tag_id", value = tag.id)
+                    div.actions
+                        input(type="submit", value="Удалить")
 
 
 
     block add_tag_form
         h4 Новый тег
-        form(action='/sources/add_source/', name="add_source_form", method="post")
+        form(action='/create_tag/', name="add_source_form", method="post")
             div.input
                 span.label Тэг
                 br

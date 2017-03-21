@@ -11,7 +11,21 @@ block content
         p= "URL источника " + item.source_url
         p= "Дата последнего обновления " + item.updated_at
 
-    block ontology
+    block tag_list
+        h4 Теги
+        ul
+        each tag in item.tags
+            li= tag
+
+        h5 Прикрепить тег
+        form(action='/add_tag_to_item/', name="attach_tag_form", method="post")
+            input(type="hidden", name="item_name", value = item.name)
+            select(name="tag_text")
+                each tag in tag_list
+                    option(value=tag.text) #{tag.text}
+            div.actions
+                input(type="submit", value="Прикрепить")
+
     block item_links
         div.item_links
             h2= "Связи"

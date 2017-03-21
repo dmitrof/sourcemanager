@@ -132,7 +132,7 @@ module.exports.addLinksByTag = addLinksByTag;
 
 module.exports.removeItemLink = async function(_id) {
     var result = await ItemLink.remove({_id : _id});
-    doc = await ItemLink.find({_id : _id}).exec();
+    return new CreateResult(true, 'Связь удалена', null);
 };
 
 var getTagByText = function(tag_text) {
@@ -144,11 +144,16 @@ var getTagByText = function(tag_text) {
             }
             else {
                 //console.log(data);
-                resolve(doc);
+                if (!doc)
+                    resolve(new FetchDocResult(false, 'Тег не найден', {}));
+                else
+                    return new FetchDocResult(false, 'Тег найден', doc);
+
             }
         });
     });
 };
+module.exports.getTagByText = getTagByText;
 
 var getAllTags = async function() {
     var result = await Tag.find({}).exec();
@@ -161,16 +166,17 @@ module.exports.getAllTags = getAllTags;
 
 var addTag = function(tag_data) {
     var tagconstr = {text : tag_data.text, description : tag_data.description};
-    var node_list = [];
+    /*var node_list = [];
     if (tag_data.hasOwnProperty('nodes'))
         node_list = tag_data.nodes;
     var metadata = {};
     for (var property in tag_data) {
         if (tag_data.hasOwnProperty(property))
             metadata[property] = tag_data[property];
-    }
-    var tag = new Tag({text : tag_text, nodes : node_list});
-    tag.attachMetadata(metadata);
+    }*/
+    var tag = new Tag(tag_data);
+   // tag.attachMetadata(metadata);
+    console.log(tag);
     return new Promise(function(resolve, reject) {
         tag.save(function (err) {
             if (err) {
@@ -186,7 +192,7 @@ var addTag = function(tag_data) {
     });
 };
 
-module.exports.addTag = addTag;
+module.exports.createTag = addTag;
 
 
 var removeTagByText = function(tag_text) {
@@ -203,6 +209,35 @@ var removeTagByText = function(tag_text) {
         });
     });
 };
+
+module.exports.deleteTag = async function(tag_id) {
+    var result = await Tag.remove({_id : tag_id});
+    return new CreateResult(true, 'Тег удален', null);
+};
+module.exports.deleteTagByText = async function(tag_text) {
+    var result = await Tag.remove({text : tag_text});
+    return new CreateResult(true, 'Тег удален', null);
+};
+
+var getTag = async function(tag_id) {
+    var result = await Tag.findOne({text : tag_id}).exec();
+    if (!result)
+        return new FetchDocResult(false, 'Тег не найден', {});
+    else
+        return new FetchDocResult(false, 'Тег найден', result);
+};
+module.exports.getTag = getTag;
+
+var addTagToItem = async function(item_name, tag_text) {
+    var itemResult = await item_manager.getItemByName(item_name);
+    var item = itemResult.data;
+    item.tags.push(tag_text);
+    var save_result = await item_manager.saveBuiltItem(item);
+    console.log(save_result);
+    return new CreateResult(true, 'Тег ' + tag_text + ' прикреплен');
+};
+module.exports.addTagToItem = addTagToItem;
+
 module.exports.removeTagByText = removeTagByText;
 module.exports.addTag = addTag;
 module.exports.removeAllLinksByItem = removeAllLinksByItem;

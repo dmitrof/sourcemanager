@@ -1,0 +1,19 @@
+//
+   Created by Дмитрий on 21.03.2017.
+
+extends layout
+
+block tag_info
+    h3 Информация о теге
+    p= tag.text
+    p= "Описание: " + tag.description
+    p= "Вершины онтологии: "
+    ul
+        each node in tag.nodes
+            li
+                p= "Имя вершины: " + node.name
+                p= "Описание вершины: " + node.description
+    form(action='/delete_tag/', name="delete_source_form", method="post")
+        input(type="hidden", name="tag_id", value = tag.id)
+        div.actions
+            input(type="submit", value="Удалить")

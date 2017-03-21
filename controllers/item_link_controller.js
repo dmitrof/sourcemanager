@@ -66,11 +66,47 @@ module.exports.createTag = async function(req, res, next) {
     var tag_data = {text : req.body.tag_text, description : req.body.description,
                 nodes : []};
     try {
-        var save_result = await link_manager.addTag();
+        var save_result = await link_manager.createTag(tag_data);
         res.redirect('/tags?status=' + save_result.message);
     }
     catch (err) {
         console.log(err); res.status(500).send(err);
     }
+};
 
+module.exports.deleteTag = async function(req, res, next) {
+    try {
+        console.log('requested tag deletion');
+        var result = await link_manager.deleteTag(req.body.tag_id);
+        res.redirect('/tags?status=' + result.message);
+    }
+    catch (err) {
+        console.log(err); res.status(500).send(err);
+    }
+}
+
+module.exports.getTagAndOntology =  async function(req, res, next) {
+    try {
+        var tag_text = req.query.tag_text;
+        console.log(tag_text);
+        var tag_result = await link_manager.getTagByText(tag_text);
+        if (!tag_result.success)
+            res.redirect('/tags?status' + tag_result.message);
+        else
+            res.render('tag_info', {status : tag_result.message, tag : tag_result.data});
+    }
+    catch (err) {
+        console.log(err); res.status(500).send(err);
+    }
+}
+
+module.exports.addTagToItem = async function(req, res, next) {
+    try {
+        console.log('requested add tag');
+        var result = await link_manager.addTagToItem(req.body.item_name, req.body.tag_text);
+        res.redirect('/get_item?status=' + result.message + '&item_name=' + req.body.item_name);
+    }
+    catch (err) {
+        console.log(err); res.status(500).send(err);
+    }
 }

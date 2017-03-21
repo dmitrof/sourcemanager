@@ -47,7 +47,7 @@ var getItemByName = function(item_name) {
                 reject(new ErrorResult('db_fail', err));
             else {
                 if (doc)
-                    resolve (new FetchDocResult(true, 'Получен документа', doc));
+                    resolve (new FetchDocResult(true, 'Получен документ', doc));
                 else
                     resolve (new FetchDocResult(false, 'Документ с именем ' + item_name + ' не найден'));
             }
