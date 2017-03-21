@@ -1,5 +1,5 @@
 //
-   Created by Дмитрий on 15.03.2017.
+   Created by Дмитрий on 01.03.2017.
 extends layout
 //TODO необходимо придумать, как правильно выводить метаданные. Возможно придется добавить файлик, который будет переводить на русский поля метаданных
 block content
@@ -20,7 +20,7 @@ block content
             - var i = 0;
             each item_link in item_links
                 - i++;
-                p= i + "  " + item_link.node_name + ": " + item_link.description
+                p= i + "  " + item_link.node_name + ": " + item_link.node_description
                 form(action='/delete_item_link/', name="delete_item_link_form", method="post")
                     input(type="hidden", name="item_link_id", value = item_link.id)
                     input(type="hidden", name="item_name", value = item.name)

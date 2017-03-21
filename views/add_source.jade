@@ -19,6 +19,14 @@ block sources_form
         div.input
             span.label Тип источника
             br
+
+            select(name="source_type")
+                each source_type in source_types
+                    option(value=source_type.type) #{source_type.type}
+            h5= source_types_status
+        //div.input
+            span.label Тип источника
+            br
             input(type="text", name="source_type", placeholder="Тип источника")
             br
         div.input

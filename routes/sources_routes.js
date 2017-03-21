@@ -10,15 +10,7 @@ var source_controller = require('./../controllers/source_controller');
 
 var setRoutes = function(app) {
     //TODO здесь должны учитываться данные фильтров
-    app.get(prefix.concat('/'), function(req, res, next) {
-        console.log('requesting sources list');
-        var status = req.query.status;
-        source_manager.getSources().then(sources => {
-            let res_data = {status : status, sources : sources, title : "sources_list"};
-            res.render('add_source', res_data);
-        }).catch(reject => {console.log('bad');res.status(500).send(reject)});
-        //res.render('test_ejs', {status : "sources_list_request", sources : ['s1', 's2']});
-    });
+    app.get(prefix.concat('/'), source_controller.getAllSources);
     //получает источник и список единиц учебного материала
     app.post(prefix.concat('/get_source/'), function(req, res, next) {
         var source_url = req.body.source_url;
@@ -67,6 +59,7 @@ var setRoutes = function(app) {
 
     app.post(prefix.concat('/add_source'), source_controller.addSource);
 
+    app.post(prefix.concat('/delete_source'), source_controller.deleteSource);
 
     app.post(prefix.concat('/delete_source'), function(req, res, next) {
         console.log('requesting source deletion');

@@ -38,7 +38,7 @@ module.exports.getParserByName = getParserByName;
 
 async function createParser(data) {
     var result = await getParserByName(data.name);
-    if (result) {
+    if (result.success) {
         return new CreateResult(false, "Уже есть парсер с именем ".concat(data.name));
     }
     var parser = new Parser(data);

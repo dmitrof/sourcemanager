@@ -7,6 +7,20 @@ var source_manager = require('./../modules/source_manager');
 var item_manager = require('./../modules/item_manager');
 var parser_manager = require('./../modules/parser_manager');
 
+module.exports.getAllSources = async function(req, res, next) {
+    try {
+        console.log('requesting sources list');
+        var [sources_result, source_types_result] = await Promise.all([source_manager.getSources(), source_manager.getSourceTypes()]);
+        var res_data = {status : req.query.status, sources_status : sources_result.message, sources : sources_result.data,
+            source_types_status : source_types_result.message, source_types : source_types_result.data};
+
+        res.render('add_source', res_data);
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).send(reject)
+    };
+};
 
 var addSource = async function(req, res, next) {
     console.log('requesting source addition');
@@ -23,6 +37,29 @@ var addSource = async function(req, res, next) {
 };
 module.exports.addSource = addSource;
 
+var deleteSource = async function(req, res, next) {
+    if (req.body.delete_content)
+        deleteSourceAndContent(req, res, next)
+    else {
+        try {
+            delete_result = await source_manager.removeSourceByUrl(req.body.source_url);
+            res.redirect('/sources?status=' + delete_result.message);
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).send(err);
+        }
+    }
+};
+module.exports.deleteSource = deleteSource;
+
+var deleteSourceAndContent = async function(req, res, next) {
+
+};
+module.exports.deleteSourceAndContent = deleteSourceAndContent;
+
+
+
 var getSourceTypeById = async function(req, res, next) {
     console.log()
 };
@@ -37,7 +74,7 @@ var getSourceTypes = async function(req, res, next) {
         var [types_result, parsers_result] = await Promise.all([source_manager.getSourceTypes(),
                                             parser_manager.getParsers()]);
         //console.log(result);
-        res.render('add_source_type', {status : status, source_types : types_result,
+        res.render('add_source_type', {status : types_result.message, source_types : types_result.data,
             parser_list : parsers_result.data, parsers_status : parsers_result.message});
     }
     catch (e){

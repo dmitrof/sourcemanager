@@ -30,7 +30,8 @@ module.exports.getNodesAndItem = getNodesAndItem;
 
 module.exports.addLinkForItem = async function(req, res, next) {
     if ((!req.body.unique_link) || (req.body.unique_link === undefined))
-        var result = await link_manager.addItemLink(req.body.item_name, req.body.node_id, {description : req.body.node_description});
+        var result = await link_manager.addItemLink(req.body.item_name, req.body.node_id,
+            {node_description : req.body.node_description, node_name : req.body.node_name});
     else
         var result = await link_manager.addUniqueItemLink(req.body.item_name, req.body.node_id, {description : req.body.node_description});
     res.redirect('/get_item/get_ontology?status=' + result.message + "&item_name=" + req.body.item_name + "&item_title=" + req.body.item_title);
@@ -48,3 +49,28 @@ module.exports.deleteItemLink = async function(req, res, next) {
     }
 
 };
+
+module.exports.getAllTags = async function(req, res, next) {
+    console.log('requested list of tags');
+    try {
+        var result = await link_manager.getAllTags();
+        res.render('tags', {tags : result.data, status : result.message})
+    }
+    catch (err) {
+        console.log(err); res.status(500).send(err);
+    }
+};
+
+module.exports.createTag = async function(req, res, next) {
+    console.log('requested tag addition');
+    var tag_data = {text : req.body.tag_text, description : req.body.description,
+                nodes : []};
+    try {
+        var save_result = await link_manager.addTag();
+        res.redirect('/tags?status=' + save_result.message);
+    }
+    catch (err) {
+        console.log(err); res.status(500).send(err);
+    }
+
+}

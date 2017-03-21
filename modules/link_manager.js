@@ -4,7 +4,7 @@
 var item_manager = require('./../modules/item_manager');
 var ItemLink = require('./../models/itemlink');
 var ItemModel = require('./../models/item');
-var LinkTagModel = require('./../models/linktag');
+var Tag = require('./../models/linktag');
 var ontology_provider = require('./../modules/ontology_provider');
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
@@ -62,16 +62,16 @@ module.exports.getLinksByItem = getLinksByItem;
 /*Добавляет itemLink в базу */
 var addItemLink = function(_item_name, node_id, node_data) {
     return new Promise(function (resolve, reject) {
+
         var constr = { item_name : _item_name, node_id : node_id};
-        if (node_data.hasOwnProperty('node_name'))
-            constr.node_name = node_data.node_name;
-        if (node_data.hasOwnProperty('node_description'))
-            constr.node_description = node_data.node_description;
+        constr.node_name = node_data.node_name;
+        constr.node_description = node_data.node_description;
         var metadata = {};
         for (var property in node_data) {
             if (node_data.hasOwnProperty(property))
                 metadata[property] = node_data[property];
         }
+        console.log(constr);
         var itemLink = new ItemLink(constr);
         itemLink.attachMetadata(metadata);
         itemLink.save(function (err) {
@@ -129,18 +129,15 @@ var addLinksByTag = function(item_name, tag_text, data) {
 };
 module.exports.addLinksByTag = addLinksByTag;
 
+
 module.exports.removeItemLink = async function(_id) {
-    var doc = await ItemLink.find({_id : _id}).exec();
-    console.log('Перед удалением' + doc);
     var result = await ItemLink.remove({_id : _id});
     doc = await ItemLink.find({_id : _id}).exec();
-    console.log('После удаления' + doc);
-    return new CreateResult(true, 'Связь удалена', null);
 };
 
 var getTagByText = function(tag_text) {
     return new Promise(function(resolve, reject) {
-        LinkTagModel.findOne({ text : tag_text}, function(err, doc) {
+        Tag.findOne({ text : tag_text}, function(err, doc) {
             if (err) {
                 console.log("findone error");
                 reject(err)
@@ -153,8 +150,18 @@ var getTagByText = function(tag_text) {
     });
 };
 
-var addTag = function(tag_text, tag_data) {
-    var tagconstr = {text : tag_text}; var node_list = [];
+var getAllTags = async function() {
+    var result = await Tag.find({}).exec();
+    if (result.length > 0)
+        return new FetchDocResult(true, 'Получен список тегов', result);
+    else
+        return new FetchDocResult(false, 'Теги не найдены', []);
+};
+module.exports.getAllTags = getAllTags;
+
+var addTag = function(tag_data) {
+    var tagconstr = {text : tag_data.text, description : tag_data.description};
+    var node_list = [];
     if (tag_data.hasOwnProperty('nodes'))
         node_list = tag_data.nodes;
     var metadata = {};
@@ -162,7 +169,7 @@ var addTag = function(tag_text, tag_data) {
         if (tag_data.hasOwnProperty(property))
             metadata[property] = tag_data[property];
     }
-    var tag = new LinkTagModel({text : tag_text, nodes : node_list});
+    var tag = new Tag({text : tag_text, nodes : node_list});
     tag.attachMetadata(metadata);
     return new Promise(function(resolve, reject) {
         tag.save(function (err) {
@@ -172,16 +179,19 @@ var addTag = function(tag_text, tag_data) {
             }
             else {
                 //console.log("itemLink for " + itemLink.item_name + "saved to db");
-                resolve("tag " + tag_text + " saved to db");
+                resolve(new CreateResult(true, 'Тэг добавлен', null));
             }
 
         })
     });
 };
 
+module.exports.addTag = addTag;
+
+
 var removeTagByText = function(tag_text) {
     return new Promise(function(resolve, reject) {
-        LinkTagModel.remove({ text : tag_text}, function(err) {
+        Tag.remove({ text : tag_text}, function(err) {
             if (err) {
                 console.log("removeTagByText error");
                 reject(err)

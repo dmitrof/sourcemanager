@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var sources_routes = require('./routes/sources_routes');
 var parser_routes = require('./routes/parser_routes');
 var item_routes = require('./routes/item_routes');
+var tag_routes = require('./routes/tag_routes');
 
 var app = require('express')();
 var debug = require('debug')('express-parser-3:server');
@@ -80,7 +81,7 @@ function initRoutes() {
     sources_routes.setRoutes(app);
     item_routes.setRoutes(app);
     parser_routes.setRoutes(app);
-
+    tag_routes.setRoutes(app);
 
     app.use(function(req, res, next) {
         var err = new Error('Not Found');

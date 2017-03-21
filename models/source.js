@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var sourceSchema = new Schema({
     url : { type: String, required: true, unique: true},
     type : {type: String, required: true},
-    name : {type: String, required: true, default : "Unnamed source"},
+    name : {type: String, required: true},
     description : {type: String, default : "Undiscribed source"},
     added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
     created_at : {type: Date},

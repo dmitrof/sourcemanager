@@ -12,10 +12,15 @@ block content
             - i++;
             li
                 p= i + "  " + source.name + ": " + source.type
-                //form(action='/sources/get_source/', name="add_source_form", method="post")
+
+                a(href="/sources/get_source?source_url=" + source.url) Просмотреть
+                form(action='/sources/delete_source/', name="delete_source_form", method="post")
                     input(type="hidden", name="source_url", value = source.url)
+                    div.input
+                        input(type="checkbox", name="delete_content", value=false)
+                        span.label Удалить вместе с контентом
+                        br
                     div.actions
-                        input(type="submit", value="Изменить")
-                a(href="/sources/get_source?source_url=" + source.url) Изменить
+                        input(type="submit", value="Удалить")
     block sources_form
 

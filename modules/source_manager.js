@@ -9,7 +9,7 @@ var ParserInfo = require('./../models/parser');
 
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 var ErrorResult = require('./../modules/AsyncResult').ErrorResult;
-
+var CreateResult = require('./../modules/AsyncResult').CreateResult;
 var Item = require('./../models/item');
 var Source = require('./../models/source');
 
@@ -23,10 +23,10 @@ var getFilteredSources = function(filter_data) {     /*TODO написать о�
             if (err) reject(err);
             else {
                 if (Array.isArray(docs))
-                    resolve(docs);
+                    resolve(new FetchDocResult(true, 'Получен перечень доступных источников', docs));
                 else {
                     sources.push(docs);
-                    resolve(sources);
+                    resolve(new FetchDocResult(true, 'Получен перечень доступных источников', docs));
                 }
             }
         })
@@ -58,8 +58,12 @@ var addSource = function(source_data) {
                     description : source_data.description,
                 };
             }
-        ).then(source_info => {
+        ).then(source_info => { {
+            console.log('SOURCE_INFO TO SAVE');
+            console.log(source_info);
             return saveSource(source_info)
+        }
+
         }).then(saveSuccess => {
             console.log(saveSuccess);
             resolve(saveSuccess);
@@ -153,11 +157,7 @@ var fetchSourceMetadata = function(source_url) {
  */
 var saveSource = function(source_info) {
     return new Promise(function (resolve, reject) {
-        var source = new Source({
-            url : source_info.url,
-            type : source_info.type
-            //added_by_user : getUserFromSession
-        });
+        var source = new Source(source_info);
         if (source_info.hasOwnProperty('metadata')) source.attachMetadata(source_info.metadata);
         source.save(function (err) {
             if (err) {
@@ -193,11 +193,10 @@ var removeSourceByUrl = function(source_url) {
     return new Promise(function(resolve, reject) {
         Source.remove({ url : source_url}, function(err) {
             if (err) {
-                resolve("could not remove source  \"".concat(source_url));
                 reject(err)
             }
             else {
-                resolve("source  \"".concat(source_url).concat("\" removed"));
+                resolve(new CreateResult(true, 'Источник ' + source_url +  ' удален', null));
             }
         });
     });
@@ -213,8 +212,12 @@ getUrlDomain = function(source_url, callback) { //TODO а надо ли вооб
     return 'www.youtube.com';
 };
 
-module.exports.getSourceTypes = function() {
-    return SourceType.find({}).exec();
+module.exports.getSourceTypes = async function() {
+    var result = await SourceType.find({}).exec();
+    if (result > 0)
+        return new FetchDocResult(true, 'source types', result)
+    else
+        return  new FetchDocResult(false, 'source types', result)
 };
 
 module.exports.createSourceType = function(data) {
