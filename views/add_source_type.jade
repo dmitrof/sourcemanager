@@ -11,15 +11,23 @@ block add_source_type_form
             br
             input(type="text", name="type", placeholder="тип источника")
             br
+            br
         div.input
             span.label Описание источника
             br
             input(type="text", name="description", placeholder="Описание типа источника", value="Опишите тип источника")
             br
+            br
         div.input
             span.label Парсер источника
             br
-            input(type="text", name="parser", placeholder="Парсер источника")
+            select(name="parser_select")
+                each parser in parser_list
+                    -console.log(parser.name)
+                    option(value=parser.name) #{parser.name}
+            //input(type="text", name="parser", placeholder="Парсер источника")
+            br
             br
         div.actions
             input(type="submit", value="add")
+        h4= parsers_status

@@ -3,14 +3,16 @@
 
 extends layout
 block content
-    h1 Список источников
+    h1 Типы источников
     //список ресурсов и возможных действий с ними
     - var i = 0;
-    ul
+    ol
         each source_type in source_types
-            - i++;
+            //- i++;
             li
-                p= i + "  " + source_type.type + ": " + source_type.parser
+                p= "Тип источника: " + source_type.type
+                p= "Парсер источника: " + source_type.parser
+                p= "Тип источника добавлен пользователем " + source_type.added_by
                 form(action='/delete_source_type', name="delete_source_type_form", method="post")
                     input(type="hidden", name="source_type_id", value = source_type.id)
                     div.actions

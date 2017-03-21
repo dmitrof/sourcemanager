@@ -4,7 +4,23 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    h3= status
+    block navigation
+      ul.navigation_bar
+        li
+          a(href="/sources/") Источники
+        li
+          a(href="/parsers/") Парсеры
+        li
+          a(href="/source_types/") Типы источников
+        li
+          a(href="/sources/") Контент
+        li
+          a(href="/sources/") Связи
+        li
+          a(href="/sources/") Теги
+
+    h3.staus= status
+
     block content
 
-    a(href="/sources/") Перейти к списку источников
+

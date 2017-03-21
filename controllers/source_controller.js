@@ -5,6 +5,7 @@
 
 var source_manager = require('./../modules/source_manager');
 var item_manager = require('./../modules/item_manager');
+var parser_manager = require('./../modules/parser_manager');
 
 
 var addSource = async function(req, res, next) {
@@ -33,12 +34,15 @@ var getSourceTypes = async function(req, res, next) {
     if (req.query.status)
         status = req.query.status;
     try {
-        var result = await source_manager.getSourceTypes();
+        var [types_result, parsers_result] = await Promise.all([source_manager.getSourceTypes(),
+                                            parser_manager.getParsers()]);
         //console.log(result);
-        res.render('add_source_type', {status : status, source_types : result});
+        res.render('add_source_type', {status : status, source_types : types_result,
+            parser_list : parsers_result.data, parsers_status : parsers_result.message});
     }
     catch (e){
         console.log(e);
+        res.status(500).send(e);
     }
 };
 module.exports.getSourceTypes = getSourceTypes;
@@ -46,7 +50,7 @@ module.exports.getSourceTypes = getSourceTypes;
 var createSourceType = async function(req, res, next) {
     console.log('requesting add source type ' + req.body.type);
     var data = {type : req.body.type,  description : req.body.description,
-        parser : req.body.parser, added_by : "Kostyl user", metadata : req.body.metadata};
+        parser : req.body.parser_select, added_by : "Kostyl user", metadata : req.body.metadata};
     try {
         var result = await source_manager.createSourceType(data);
         res.redirect('/source_types?status=source_created' );

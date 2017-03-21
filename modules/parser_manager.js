@@ -11,11 +11,12 @@ var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
 
 var getParsers = async function() {
     var docs = await Parser.find({}).exec();
-    if (docs) {
-        return new FetchDocResult(true, 'Документы получены', docs);
+    if (docs.length > 0) {
+        console.log(docs);
+        return new FetchDocResult(true, 'Парсеры получены', docs);
     }
     else {
-        return new FetchDocResult(false, 'Документы не найден', docs);
+        return new FetchDocResult(false, 'Нет доступных парсеров', docs);
     }
 };
 module.exports.getParsers = getParsers;
