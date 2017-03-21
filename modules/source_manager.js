@@ -97,13 +97,14 @@ var parseSource = function(source_url, source_type) {
 
     return new Promise((resolve, reject) => {
         parser_manager.getParserByType(source_type)
-            .then(parserInfo => {
+            .then(resolved=> {
+                console.log(resolved);
+                var parserInfo = resolved.data;
+                console.log('PARSER PATH:' + parserInfo.name);
                 if (parserInfo.standalone) {
-
                     return parseRequest(source_url, parserInfo);
                 }
                 else {
-
                     var parser = require('./../modules/'.concat(parserInfo.name));
                     return parser.fetchAllItems(source_url);
                 }

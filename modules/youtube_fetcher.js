@@ -37,27 +37,63 @@ var buildResponse = function(items) {
     else return { status : "no_items_fetched"}
 };
 
+var fetchChannelId = function(source_url) {
+    let req = "https://www.googleapis.com/youtube/v3/channels?key=access_token&forUsername={USER_NAME}&part=id";
+    let userId = source_url.substring(source_url.indexOf('user') + 'user'.length + 1, source_url.length);
+    if (userId.includes('/')) userId = userId.substr(0, userId.indexOf('/'));
+    req = req.replace('access_token', ACCESS_TOKEN);
+    req = req.replace('{USER_NAME}', userId);
+    console.log(req);
+    return new Promise((resolve, reject) => {
+        request.get(req, function(err, header, body) {
+            if (err) {
+                console.log(err);
+                reject(err);
+                return;
+            }
+            body = JSON.parse(body);
+            if (body.hasOwnProperty("error"))
+                reject(generateErrorText(body));
+            console.log('channelID is ' + body.items[0].id);
+            resolve(body.items[0].id);
+        });
+    });
+};
+
+module.exports.fetchChannelId = fetchChannelId;
+
 /*убрать из module.exports*/
 /*TODO может быть несколько разных представлений адреса канала*/
-var buildRequest = function(source_url) {
-    if (source_url.includes('channel')) {
-        let channelId = source_url.substring(source_url.indexOf('channel') + 'channel'.length + 1, source_url.length);
-        if (channelId.includes('/')) channelId = channelId.substr(0, channelId.indexOf('/'));
-        console.log('YouTube channel id: '.concat(channelId));
-        let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id&order=date&maxResults=10';
-        req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', channelId);
-        return req;
-    }
-    /*TODO дописать*/
-    else if (source_url.includes('playlist')) {
-        let playListId = source_url.substring(source_url.indexOf('channel') + 'channel'.length + 1, source_url.length);
-        if (playListId.includes('/')) channelId = playListId.substr(0, channelId.indexOf('/'));
-        console.log('Parsing youtube playlist'.concat(source_url));
-        let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id,contentDetails&order=date&maxResults=10';
-        req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', playListId);
-        return req;
-    }
-    else throw new Error("Wrong source url");
+var buildRequest = async function(source_url) {
+    return new Promise((resolve, reject) => {
+        if (source_url.includes('user')) {
+            fetchChannelId(source_url).then(channelId=> {
+                let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id&order=date&maxResults=10';
+                req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', channelId);
+                resolve(req);
+            }, rejected => reject(rejected));
+
+        }
+        else if (source_url.includes('channel')) {
+            let channelId = source_url.substring(source_url.indexOf('channel') + 'channel'.length + 1, source_url.length);
+            if (channelId.includes('/')) channelId = channelId.substr(0, channelId.indexOf('/'));
+            console.log('YouTube channel id: '.concat(channelId));
+            let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id&order=date&maxResults=10';
+            req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', channelId);
+            resolve(req);
+        }
+        /*TODO дописать*/
+        else if (source_url.includes('playlist')) {
+            let playListId = source_url.substring(source_url.indexOf('channel') + 'channel'.length + 1, source_url.length);
+            if (playListId.includes('/')) channelId = playListId.substr(0, channelId.indexOf('/'));
+            console.log('Parsing youtube playlist'.concat(source_url));
+            let req = 'https://www.googleapis.com/youtube/v3/search?key=access_token&channelId=ch_id&part=snippet,id,contentDetails&order=date&maxResults=10';
+            req = req.replace('access_token', ACCESS_TOKEN); req = req.replace('ch_id', playListId);
+            resolve(req);
+        }
+        else reject("Wrong source url");
+    });
+
 };
 module.exports.buildRequest = buildRequest;
 
@@ -73,28 +109,30 @@ var fetchAllItems = function(source_url) {
     return new Promise((resolve, reject) => {
         try {
             var items = [];
-            var req = buildRequest(source_url);
-            request.get(req, function(err, header, body) {
-                if (err) {
-                    console.log(err);
-                    reject(err);
-                    return;
-                }
-                body = JSON.parse(body);
-                if (body.hasOwnProperty("error"))
-                    reject(generateErrorText(body));
-                var itemList = [];
-                var rawItems = body.items;
-                //console.log(body);
-                for (i in rawItems) {
-                    var rawItem = rawItems[i];
-                    var item = buildItem(rawItem, source_url);
-                    //console.log(item);
-                    items.push(item);
-                }
-                console.log(buildResponse(items));
-                resolve(buildResponse(items));
-            });
+            buildRequest(source_url).then(req => {
+                request.get(req, function(err, header, body) {
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                        return;
+                    }
+                    body = JSON.parse(body);
+                    if (body.hasOwnProperty("error"))
+                        reject(generateErrorText(body));
+                    var itemList = [];
+                    var rawItems = body.items;
+                    //console.log(body);
+                    for (i in rawItems) {
+                        var rawItem = rawItems[i];
+                        var item = buildItem(rawItem, source_url);
+                        //console.log(item);
+                        items.push(item);
+                    }
+                    console.log(buildResponse(items));
+                    resolve(buildResponse(items));
+                });
+            }, rejected => console.log(rejected));
+
         }
         catch(e) { reject(e); }
     });

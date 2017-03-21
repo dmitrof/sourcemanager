@@ -7,11 +7,11 @@ block content
     h3 Список доступных парсеров
     //список ресурсов и возможных действий с ними
     - var i = 0;
-    ul
+    ol
         each parser in parser_list
             - i++;
             li
-                p= i + "  " + parser.name + ": " + parser.description
+                p= parser.name + ": " + parser.description
                 p= "Автономный: " + parser.standalone + "; Сохраняет в базу мультимедиа: " + parser.saves_attachments
                 form(action='/delete_parser', name="delete_parser", method="post")
                     input(type="hidden", name="parser_id", value = parser.id)

@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var CreateResult = require('./../modules/AsyncResult').CreateResult;
 var FetchDocResult = require('./../modules/AsyncResult').FetchDocResult;
+var SourceType = require('./../models/sourcetype');
 
 
 var getParsers = async function() {
@@ -49,6 +50,32 @@ module.exports.createParser = createParser;
     return await(Parser.loadByName(_name));
 };
 module.exports.getParserByName = getParserByName;*/
+
+var getParserByType = async function(source_type) {
+    var source_type = await SourceType.findOne({type : source_type}).exec();
+    console.log(source_type.parser);
+    if (!source_type) {
+        return new Promise((resolve, reject) => {
+            reject(new FetchDocResult(false, 'nonexistent source type',null ));
+        });
+    }
+    else {
+        let parser = await getParserByName(source_type.parser);
+        if (!parser)
+            return new Promise((resolve, reject) => {
+                reject(new FetchDocResult(false, 'parser' + source_type.parser +' does not exist', null ));
+
+            });
+        else
+            return new Promise((resolve, reject) => {
+                resolve(new FetchDocResult(true, 'Parser is fetched', parser.data));
+            });
+    }
+
+
+
+};
+module.exports.getParserByType = getParserByType;
 
 var deleteParser = function(parser_id) {
     return Parser.remove({_id : parser_id}).exec();

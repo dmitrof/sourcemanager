@@ -10,7 +10,7 @@ var parser_manager = require('./../modules/parser_manager');
 
 var addSource = async function(req, res, next) {
     console.log('requesting source addition');
-    var source_data = {url : req.body.source_url,  name : req.body.name, type : req.body.source_type, description : req.body.description};
+    var source_data = {url : req.body.source_url,  name : req.body.source_name, type : req.body.source_type, description : req.body.description};
     try {
         var result = await source_manager.addAndParseSource(source_data);
         //console.log(result);
