@@ -1,0 +1,65 @@
+{
+    "status": "ok/fail",
+    "message": "source is parsed successfully/internal error/wrong source url и т.д.",
+    "items": [
+        {
+            "title": "Rational numbers lesson 3",
+            "type": "vk_video",
+            "body": {
+                "video_id": "a1209fwef0fj",
+                "url": "какой-то урл, по которому можно воспроизвести ролик в плагине"
+            },
+            "features": [
+                {
+                    "showable": true,
+                    "key": "durability",
+                    "value": "14.41.424",
+                    "rus": "Продолжительснсть"
+                }
+            ],
+            "attachments": [
+            ]
+        },
+        {
+            "title" : "Лекция 3: каррирование функций высшего порядка",
+            "type": "attachments_list",
+
+            "body" : {
+
+                "attachments_list" : ["14eett", "1grh45", "qwegqwg"]
+
+            },
+
+
+            "features" : [
+                {
+                    "showable" : true,
+                    "key" : "estimated time",
+                    "value" : "14125125",
+                    "rus" : "Продолжительснсть",
+                    "sp": "фцупцукрцупцукруцкацукр"
+                }
+            ],
+            "attachments" : [
+                {
+                    "id": "14eett",
+                    "title": "Часть 1",
+                    "mime_type": "mp3",
+                    "content": "wrfgjw0g8u93gwejg98g498hg9w8hg93wgh9w8gh"
+                },
+                {
+                    "id": "1grh45",
+                    "title": "Часть 2",
+                    "mime_type": "mp3",
+                    "content": "wrfgjw0g8u93gwejg98g498hg9w8hg93wgh9w8gh"
+                },
+                {
+                    "id": "qwegqwg",
+                    "title": "Часть 3",
+                    "mime_type": "mp3",
+                    "content": "wrfgjw0g8u93gwejg98g498hg9w8hg93wgh9w8gh"
+                }
+            ]
+        }
+    ]
+}

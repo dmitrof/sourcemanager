@@ -7,11 +7,12 @@ h1= status
 block content
     //список ресурсов и возможных действий с ними
     - var i = 0;
-    ul
+    ol
         each source in sources
             - i++;
             li
-                p= i + "  " + source.name + ": " + source.type
+                p
+                    b= source.name + ": " + source.type
 
                 a(href="/sources/get_source?source_url=" + source.url) Просмотреть
                 form(action='/sources/delete_source/', name="delete_source_form", method="post")

@@ -5,7 +5,14 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00A1CC;
+  text-decoration: none
+}
+
+a:hover {
+  color: white;
+  background-color:  #4CAF50;
+  text-decoration: none
 }
 
 ul.navigation_bar {
@@ -14,6 +21,12 @@ ul.navigation_bar {
   padding-bottom: 50px;
   padding-left : 0;
 }
+
+.status {
+  color : red
+}
+
+
 
 ul.navigation_bar > li a {
   text-decoration: none;
@@ -31,6 +44,6 @@ ul.navigation_bar > li a {
 }
 
 ul.navigation_bar > li a:hover {
-  background-color:  #4CAF50;;
+  background-color:  #4CAF50;
   color: white;
 }
