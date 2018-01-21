@@ -31,7 +31,7 @@ app.use('/users', users);
 var dbWrapper = require('./modules/db_wrapper');
 //app.set('port', process.env.PORT || 3000);
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '8000');
 app.set('port', port);
 
 console.log('sup');

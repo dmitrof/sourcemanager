@@ -35,7 +35,6 @@ var getParserByName = async function(parser_name) {
 };
 module.exports.getParserByName = getParserByName;
 
-
 async function createParser(data) {
     var result = await getParserByName(data.name);
     if (result.success) {
@@ -46,10 +45,6 @@ async function createParser(data) {
     return new CreateResult(true, "Сохранен ".concat(data.name));
 }
 module.exports.createParser = createParser;
-/*var getParserByName = async function(_name) {
-    return await(Parser.loadByName(_name));
-};
-module.exports.getParserByName = getParserByName;*/
 
 var getParserByType = async function(source_type) {
     var source_type = await SourceType.findOne({type : source_type}).exec();
@@ -71,9 +66,6 @@ var getParserByType = async function(source_type) {
                 resolve(new FetchDocResult(true, 'Parser is fetched', parser.data));
             });
     }
-
-
-
 };
 module.exports.getParserByType = getParserByType;
 

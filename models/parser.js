@@ -33,8 +33,4 @@ parsersSchema.statics = {
 
 };
 
-
-
-
-
 module.exports = mongoose.model('Parser',parsersSchema);

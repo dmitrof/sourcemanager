@@ -18,6 +18,27 @@ var getNodes = async function(req, res, next) {
 };
 module.exports.getNodes = getNodes;
 
+var getNodes2 = async function(req, res, next) {
+    var resultPromise = new Promise((resolve, reject) =>
+    {
+        var result = ontology_provider.requestOntology('sup');
+        if (result.success)
+            resolve(result)
+        else
+            reject(result)
+    }).then(result => {
+        res.render('item_ontology', {status : result.message, ontology : result.data});
+    }).catch(result => {
+        res.redirect('/sources?status='.concat(result.message));
+    })
+};
+
+var getOntology = async function(req, res) {
+    var result = await ontology_provider.requestOntology(req.params.domain_uri);
+    res.json(result.data);
+};
+
+module.exports.getOntology = getOntology;
 
 var getNodesAndItem = async function(req, res, next) {
     var result = await ontology_provider.requestOntology('sup');
