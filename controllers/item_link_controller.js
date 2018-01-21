@@ -33,19 +33,13 @@ var getNodes2 = async function(req, res, next) {
     })
 };
 
-var getOntology = async function(req, res) {
-    var result = await ontology_provider.requestOntology(req.params.domain_uri);
-    res.json(result.data);
-};
-
-module.exports.getOntology = getOntology;
 
 var getNodesAndItem = async function(req, res, next) {
-    var result = await ontology_provider.requestOntology('sup');
+    var result = await ontology_provider.requestOntology('domain_uri_0');
     var item = {name : req.query.item_name, title : req.query.item_title};
     var status = req.query.status;
     //parseOntologyNode(result.data);
-    res.render('item_ontology', {ontology_status : result.message, ontology : result.data, item : item, status : status});
+    res.render('item_ontology', {ontology_status : result.message, ontology : result.data.tree, item : item, status : status});
 };
 module.exports.getNodesAndItem = getNodesAndItem;
 
@@ -131,3 +125,17 @@ module.exports.addTagToItem = async function(req, res, next) {
         console.log(err); res.status(500).send(err);
     }
 }
+
+var getDomains = async function(req, res) {
+    var result = await ontology_provider.getDomains();
+    res.json(result.data);
+}
+
+module.exports.getDomains = getDomains;
+
+var getOntology = async function(req, res) {
+    var result = await ontology_provider.requestOntology(req.params.domain_uri);
+    res.json(result.data);
+};
+
+module.exports.getOntology = getOntology;
