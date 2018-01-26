@@ -9,9 +9,9 @@ block content
         p= "Название источника: " + source.name
         p= "URL: " + source.url
         p= "Описание : " + source.description
-        p= "Добавлен пользователем: " + source.added_by_user
+        p= "Добавлен пользователем: " + source.user
         p= "Последнее обновление: " + source.updated_at
-        p= "Состояние: " + source.parse_state
+        p= "Состояние: " + source.state
 
     div.items_info
         - var i = 0;

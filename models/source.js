@@ -4,15 +4,20 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+const sourceStates = {
+    PENDING: 'PENDING',
+    PARSED: 'PARSED',
+    PARSING_FAILED: 'PARSING_FAILED'
+}
 
 var sourceSchema = new Schema({
     url : { type: String, required: true, unique: true},
     type : {type: String, required: true},
     name : {type: String, required: true},
     description : {type: String, default : "Undiscribed source"},
-    added_by_user : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
+    user_id : {type: String, required: true, default : "Kostyl"}, //TODO имя или id пользователя (переделать, когда появится аутентификация)
     created_at : {type: Date},
-    parse_state : {type : String, required: true, enum : ['pending', 'parsed', 'parse_not_possible'], default : 'pending'},
+    state : {type : String, required: true, enum : [sourceStates.PENDING, sourceStates.PARSED, sourceStates.PARSING_FAILED], default : sourceStates.PENDING},
     updated_at : {type: Date},
     metadata : {},
     features : {}

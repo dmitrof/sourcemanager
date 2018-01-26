@@ -13,13 +13,13 @@ block content
             li
                 p= parser.name + ": " + parser.description
                 p= "Автономный: " + parser.standalone + "; Сохраняет в базу мультимедиа: " + parser.saves_attachments
-                form(action='/delete_parser', name="delete_parser", method="post")
+                form(action='/delete_parser', name="delete_parser", method="delete")
                     input(type="hidden", name="parser_id", value = parser.id)
                     input(type="hidden", name="parser_name", value = parser.name)
                     div.actions
                         input(type="submit", value="Удалить")
                 br
-                a(href="get_parser?parser=" + parser.id + "&parser_name=" + parser.name) Изменить
+                a(href="/parsers/" + parser.name) Изменить
 
     block add_parser_form
         h3 Добавить новый парсер
@@ -41,9 +41,9 @@ block content
                 br
             div.input
                 input(type="checkbox", name="standalone", value=false)
-                span.label Парсер является независимым приложением
+                span.label Автономный парсер
             div.input
-                span.label Адрес парсера
+                span.label URL парсера
                 br
                 input(type="text", name="parser_url", placeholder="URL")
                 br

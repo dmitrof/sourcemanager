@@ -8,8 +8,9 @@ var Schema = mongoose.Schema;
 var parsersSchema = new Schema({
     name : { type: String, required: true, unique: true},
     description : {type: String, default : "Undescribed parser"},
-    url : {type: String, default: "No url"},
+    url : {type: String, default: "No url"}, //url, по которому необходимо обращаться к standalone парсеру
     saves_attachments : { type: Boolean, required: true, default : false},   //сохраняет ли парсер аттачменты? (для больших файлов)
+    user_id: {type: String, required:true, default: "Kostyl"},
     standalone : { type: Boolean, required: true, default : false},     //указывает на то, является ли парсер автономным приложением
     metadata : {},
     created_at : {type: Date},
@@ -23,13 +24,14 @@ parsersSchema.methods = {
 };
 
 parsersSchema.statics = {
+    getByName : function(name) {
+        console.log("called loadbyname");
+        return this.findOne({ name : name }).exec();
+    },
     load : function(_id) {
         return this.findOne({ _id }).exec();
-    },
-    loadByName : function(_name) {
-        console.log("called loadbyname");
-        return this.findOne({ name : _name }).exec();
     }
+
 
 };
 

@@ -5,12 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+//var routes = require('./routes/index');
+const router = require('./routes/routes');
+/*var users = require('./routes/users');
 var sources_routes = require('./routes/sources_routes');
 var parser_routes = require('./routes/parser_routes');
 var item_routes = require('./routes/item_routes');
-var tag_routes = require('./routes/tag_routes');
+var tag_routes = require('./routes/tag_routes');*/
 
 var app = require('express')();
 var debug = require('debug')('express-parser-3:server');
@@ -24,8 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+//app.use('/', routes);
+//app.use('/users', users);
 
 /* DB VARIABLES */
 var dbWrapper = require('./modules/db_wrapper');
@@ -40,7 +41,7 @@ dbWrapper.initDB().then(db_connected => {
 
 
     console.log('starting app init');
-    initRoutes();
+    app.use('/', router);
     app.listen(app.get('port'), function() {
         console.log('listening on ' + port);
     });
@@ -70,20 +71,12 @@ function normalizePort(val) {
 module.exports = app;
 
 
-/*function initSchemas() {
-    require('models');
-}*/
-
-
 function initRoutes() {
 
     //дичайший костыль
-    sources_routes.setRoutes(app);
-    item_routes.setRoutes(app);
-    parser_routes.setRoutes(app);
-    tag_routes.setRoutes(app);
+    app.use('/api', router);
 
-    app.use(function(req, res, next) {
+   /* app.use(function(req, res, next) {
         var err = new Error('Not Found');
         err.status = 404;
         next(err);
@@ -108,6 +101,7 @@ function initRoutes() {
             error: {}
         })
     });
+    */
     console.log('routes added');
 
 }
