@@ -6,6 +6,7 @@ extends layout
 block content
     div.parser_info
         h2= "Описание парсера"
+        p= "Uri: " + parser_info.uri
         p= "Название: " + parser_info.name
         p= "Описание: " + parser_info.description
         p= "Сохраняет аттачменты " + parser_info.saves_attachments

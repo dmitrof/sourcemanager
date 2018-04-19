@@ -19,10 +19,11 @@ module.exports.getParsers = async function(req, res, next) {
 };
 
 module.exports.getParser = async function(req, res, next) {
-    let parserName = req.params.parser_name;
-    console.log('requesting parser ' + parserName);
+    let parserUri = req.params.parser_uri;
+    console.log('requesting parser ' + parserUri);
     responseHelper.getAndRenderData(async () => {
-        let parserInfo = await Parser.getByName(parserName);
+        let parserInfo = await Parser.getByUri(parserUri);
+        console.log(parserInfo);
         return {status:'', parser_info: parserInfo};
     }
         , 'parser_info', res);
@@ -34,6 +35,7 @@ module.exports.createParser = async function(req, res, next) {
         var parserData = {name: req.body.name, description: req.body.description}
         parserData.saves_attachments = !!req.body.saves_attachments;
         parserData.standalone = !!req.body.standalone;
+        parserData.uri = parserData.name + "_uri";
         if (parserData.standalone)
             parserData.url = req.body.parser_url;
         console.log(parserData);

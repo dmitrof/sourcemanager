@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 
 /* типы парсеров */
 var parsersSchema = new Schema({
+    uri: { type: String, required:true, unique: true},
     name : { type: String, required: true, unique: true},
     description : {type: String, default : "Undescribed parser"},
     url : {type: String, default: "No url"}, //url, по которому необходимо обращаться к standalone парсеру
@@ -24,9 +25,8 @@ parsersSchema.methods = {
 };
 
 parsersSchema.statics = {
-    getByName : function(name) {
-        console.log("called loadbyname");
-        return this.findOne({ name : name }).exec();
+    getByUri : function(uri) {
+        return this.findOne({ uri : uri }).exec();
     },
     load : function(_id) {
         return this.findOne({ _id }).exec();

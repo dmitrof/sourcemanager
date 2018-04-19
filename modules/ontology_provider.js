@@ -25,7 +25,6 @@ var requestNodesData = function (node_ids) {
 };
 module.exports.requestNodesData = requestNodesData;
 
-/*вот это будет понятно как делать, когда Игорь подключится */
 var getOntology = async function (domain_uri) {
     console.log("quering ontologyservice for domain: " + domain_uri);
     var options = {

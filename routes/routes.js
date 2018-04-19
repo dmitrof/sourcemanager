@@ -18,7 +18,7 @@ router.get('/', source_controller.getAllSources);
 
 //PARSER ROUTES
 router.get('/parsers/', parser_controller.getParsers);
-router.get('/parsers/:parser_name', parser_controller.getParser);
+router.get('/parsers/:parser_uri', parser_controller.getParser);
 router.post('/add_parser/', parser_controller.createParser);
 router.delete('/delete_parser/:parser_id', parser_controller.deleteParser);
 
@@ -148,7 +148,7 @@ router.get(prefix.concat('/get_source/'), function(req, res, next) {
 });
 
 //ITEMS AND LINKS ROUTES
-router.get(prefix.concat('/get_item/'), item_controller.getItemAndLinks);
+router.get('/get_item/', item_controller.getItemAndLinks);
 router.get('/get_item/get_ontology/', link_controller.getNodesAndItem);
 router.get('/get_ontology/:domain_uri', link_controller.getOntology);
 router.get('/get_domains/', link_controller.getDomains)
